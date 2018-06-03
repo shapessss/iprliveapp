@@ -1,0 +1,69 @@
+body {
+	background: lightgray;
+	margin:0;
+	padding:0;
+}
+
+
+
+.navigation {
+	position: relative;
+	width:100%;
+	height:50px;
+	line-height:50px;
+	background:black;
+
+	display:flex;
+	flex-flow:row wrap;
+	justify-content: flex-start;
+}
+
+.navigation a {
+	display:block;
+	min-width:100px;
+	height:100%;
+	background:lightblue;
+	color:white;
+	margin:0 20px 0 20px;
+	text-align:center;
+	text-decoration: none;
+}
+
+.navigation a:hover {
+	background:red;
+	color:black;
+}
+
+
+.listing {
+	position: absolute;
+	top:100px;
+	left:150px;
+	width:calc(50% - 150px);
+
+	display:flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+
+.listing .item {
+	width:100%;
+	height:150px;
+	background:lightblue;
+}
+
+.new {
+	background:green;
+}
+
+
+
+
+.form {
+	position: absolute;
+	top:100px;
+	left:50%;
+	width:calc(50% - 150px);
+	background: red;
+}

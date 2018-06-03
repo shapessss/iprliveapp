@@ -1,0 +1,250 @@
+const admin_interface = require('../database/admin_interface.js');
+
+const multer  = require('multer')
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../../frontend/static/public/images/uploads')
+  },
+  filename: function (req, file, cb) {
+  	let name = Math.floor(Math.random() * 100) + '-' + Date.now()
+  	if (file.mimetype == "image/jpeg") name += '.jpg'
+    cb(null, name)
+  }
+})
+var upload = multer({ storage: storage })
+
+
+
+const jwt = require('jsonwebtoken');
+
+
+
+
+
+function checkNulls(req, keys) {
+	let data = [];
+	for (var k of keys) {
+		if (req.body[k] == null || req.body[k] == undefined) return data;
+		data.push(req.body[k]);
+	}
+	return data;
+}
+
+
+let token = null; //DO THIS WITH DATABASE PROBABLY
+
+
+function validateToken(req, res, next) {
+	if (req.path == '/login') return next();
+
+	if (token == null) return res.status(400).send();
+	if (req.body.token != token) return res.status(400).send(); 
+	
+	next();
+}
+
+
+
+module.exports = {
+	db_routing: function(app) {
+
+
+		app.all('*', validateToken);
+
+
+		/* --------------------- ---- ------------------------------ */
+		/* --------------------- SHOW ------------------------------ */
+		/* --------------------- ---- ------------------------------ */
+		//name, description, image_thumbnail, image_banner, frequency, featured, cb
+		app.post('/add_show', (req, res)=>{
+			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'frequency', 'featured'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.add_show(...data, (status)=>{
+				res.status(status).send();
+			})
+		});
+
+		//show_id, name, description, image_thumbnail, image_banner, frequency, featured, cb
+		app.post('/edit_show', (req, res)=>{
+			let params = ['show_id','name', 'description', 'image_thumbnail', 'image_banner', 'frequency', 'featured'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.edit_show(...data, (status)=>{
+				res.status(status).send();
+			})
+		});
+
+		app.post('/delete_show', (req, res)=>{
+			let params = ['show_id'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.delete_show(...data, (status)=>{
+				res.status(status).send();
+			})
+		});
+
+
+		/* --------------------- ---- ------------------------------ */
+		/* --------------------- RESIDENTS ------------------------- */
+		/* --------------------- ---- ------------------------------ */
+		//name, description, image_thumbnail, image_banner, guest, shows, cb
+		app.post('/add_resident', (req, res)=> {
+			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'guest', 'shows'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.add_resident(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+		app.post('/edit_resident', (req, res)=> {
+			let params = ['resident_id', 'name', 'description', 'image_thumbnail', 'image_banner', 'guest', 'shows'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.edit_resident(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+		app.post('/delete_resident', (req, res)=> {
+			let params = ['resident_id'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.delete_resident(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+
+		/* --------------------- ---- ------------------------------ */
+		/* --------------------- EVENTS ------------------------- */
+		/* --------------------- ---- ------------------------------ */
+		//name, image_thumbnail, date, url, cb
+		app.post('/add_event', (req, res)=> {
+			let params = ['name', 'image_thumbnail', 'date', 'url'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.add_event(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+		app.post('/edit_event', (req, res)=> {
+			let params = ['event_id', 'name', 'image_thumbnail', 'date', 'url'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.edit_event(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+		app.post('/delete_event', (req, res)=> {
+			let params = ['event_id'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.delete_event(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+
+
+		/* --------------------- ---- ------------------------------ */
+		/* --------------------- BANNERS ------------------------- */
+		/* --------------------- ---- ------------------------------ */
+		//banner_id, name, description, image_banner, url, cb
+		app.post('/add_banner', (req, res)=> {
+			let params = ['name', 'description', 'image_banner', 'url'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.add_banner(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+		app.post('/edit_banner', (req, res)=> {
+			let params = ['banner_id', 'name', 'description', 'image_banner', 'url'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.edit_banner(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+		app.post('/delete_banner', (req, res)=> {
+			let params = ['banner_id'];
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) res.json({'null':data.length});
+
+			admin_interface.delete_banner(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+
+		/* --------------------- ---- ------------------------------ */
+		/* --------------------- IMAGES ------------------------- */
+		/* --------------------- ---- ------------------------------ */
+		//image_id, imagename, cb
+		app.post('/add_image', upload.single('image'), (req, res)=> {
+			let image_id = req.file.filename // new name
+			let imagename = req.file.originalname
+
+			admin_interface.add_image(image_id, imagename, (status)=>{
+				res.status(status).json({
+					image_id:image_id,
+					imagename:imagename
+				});
+			})
+		})
+
+
+		app.get('/images', (req, res)=> {
+			admin_interface.get_images((rows)=>{res.json({items:rows})})
+		})
+
+	},
+
+
+	login_routing: function(app) {
+		app.post('/login', (req, res)=> {
+			if (req.body.username == "admin" && req.body.password == "admin") {
+				token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+				
+				res.json({
+					'token':token
+				})
+			}
+
+		});
+
+		app.post('/logout', (req, res)=> {
+			token = null;
+			res.send();
+		});
+	}
+}
