@@ -35,7 +35,7 @@ let token = null; //DO THIS WITH DATABASE PROBABLY
 
 
 function validateToken(req, res, next) {
-	if (req.path == '/login') return next();
+	if (req.path == '/login' || req.path == '/images') return next();
 
 	if (token == null) return res.status(400).send();
 	if (req.body.token != token) return res.status(400).send(); 

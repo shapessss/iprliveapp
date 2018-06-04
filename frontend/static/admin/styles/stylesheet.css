@@ -65,5 +65,55 @@ body {
 	top:100px;
 	left:50%;
 	width:calc(50% - 150px);
-	background: red;
+	border:solid 1px black;
+	padding:15px;
+}
+
+/*.form .add, .form .edit {display: none}*/
+
+
+.form label {
+	display:block;
+}
+
+.form input {
+	width:80%;
+	margin-bottom:10px;
+}
+
+.form input[type='submit'] {
+	width:40%;
+	max-width:150px;
+}
+
+
+input.delete {
+	background:red;
+}
+
+
+
+.lightbox {
+	position: absolute;
+	top:100px;
+	left:150px;
+	width:calc(50% - 150px);
+	min-height:calc(100% - 100px);
+	background:rgba(0,0,0,0.6);
+	display:none;
+}
+
+#lightbox-images, #lightbox-residents, #lightbox-shows {display:none;}
+
+#lightbox-images {background: red;height:300px;width:300px;}
+
+
+.close_window {
+	position: absolute;
+	top:0;
+	right:0;
+	width:20px;
+	height:20px;
+	cursor:pointer;
+	background:red;
 }

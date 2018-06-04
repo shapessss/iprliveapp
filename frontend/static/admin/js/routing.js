@@ -9,11 +9,11 @@ app.config(function($routeProvider, $locationProvider) {
     $routeProvider
 	    .when("/banners", {
 	    	templateUrl:'administration.html',
-	    	item_type:'banners'
+	    	item_type:'banner'
 	    })
 	    .when("/shows", {
 	    	templateUrl:'administration.html',
-	    	item_type:'shows'
+	    	item_type:'show'
 	    })
 	    ;
     

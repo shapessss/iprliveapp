@@ -12,8 +12,19 @@
 
 	<div class = "form">
 
-		<div ng-include="edit_template"></div>
+		<div ng-include="edit_template" class="edit"></div>
+		<div ng-include="add_template" class="add"></div>
 
+	</div>
+
+
+	<div class = "lightbox">
+		<div ng-include="image_template" id = "lightbox-images"></div> 
+		<div ng-include="resident_show_template" id = "lightbox-residents"></div>
+		<div ng-include="resident_show_template" id = "lightbox-shows"></div>
+
+
+		<div class = "close_window" onclick="$(this.parentNode).fadeOut('fast');"></div>
 	</div>
 
 
