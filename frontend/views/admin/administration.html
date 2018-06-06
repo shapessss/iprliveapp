@@ -1,13 +1,15 @@
 <div ng-controller="administration">
 	{{item_type}}
-	<div class = "listing">
-		<div class = "item new"></div>
+	<div class = "leftcol">
+		<div class = "listing">
+			<div class = "item new" onclick="$('.add').fadeIn();$('.edit').fadeOut();">+</div>
 
 
-		<div class = "item" ng-repeat = "item in items">
+			<div class = "item" ng-repeat = "item in items" onclick="$('.edit').fadeIn();$('.add').fadeOut();" ng-click="loadEditForm(item)">
+				{{item.name}}
+			</div>
 
 		</div>
-
 	</div>
 
 	<div class = "form">
@@ -25,6 +27,13 @@
 
 
 		<div class = "close_window" onclick="$(this.parentNode).fadeOut('fast');"></div>
+	</div>
+
+
+	<div id = "message">
+		
+
+		
 	</div>
 
 

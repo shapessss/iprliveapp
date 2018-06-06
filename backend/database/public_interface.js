@@ -116,7 +116,14 @@ function get_shows(cb) {
 
 
 			function get_residents(r, done) {
+				console.log(r.show_id);
 				db.all("SELECT * FROM EPISODE_RESIDENT WHERE show_id = ?", [r.show_id], (err, rows)=> {
+					if (rows == undefined) {
+						r.residents = [];
+						index += 1;
+						done();
+						return;
+					}
 					get_list_of_residents(rows, (residents)=>{
 						r.residents = residents;
 						index += 1;

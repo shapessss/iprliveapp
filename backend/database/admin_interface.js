@@ -48,6 +48,14 @@ function closedatabase(db) {
 /* --------------------- SHOW ------------------------------ */
 /* --------------------- ---- ------------------------------ */
 function add_show(name, description, image_thumbnail, image_banner, frequency, featured=0, cb) {
+	//change true/false to 1/0
+	if (featured == 'true') {
+		featured = 1;
+	} else {
+		featured = 0;
+	}
+
+
 	let sql = 'INSERT INTO SHOWS(name, description, image_thumbnail, image_banner, frequency, featured) VALUES(?,?,?,?,?,?);';
 
 	getdatabase((db) => {
@@ -64,6 +72,14 @@ function add_show(name, description, image_thumbnail, image_banner, frequency, f
 }
 
 function edit_show(show_id, name, description, image_thumbnail, image_banner, frequency, featured, cb) {
+	//change true/false to 1/0
+	if (featured == 'true') {
+		featured = 1;
+	} else {
+		featured = 0;
+	}
+
+	
 	let sql = `
 	UPDATE SHOWS
 		SET name = ?,

@@ -36,14 +36,19 @@ body {
 
 
 .listing {
+	position: relative;
+	width:100%;
+	display:flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+
+.leftcol {
 	position: absolute;
 	top:100px;
 	left:150px;
 	width:calc(50% - 150px);
-
-	display:flex;
-	flex-direction: column;
-	justify-content: flex-start;
 }
 
 
@@ -58,6 +63,28 @@ body {
 }
 
 
+.item img {
+	max-height:100%;
+	padding:10px;
+	cursor: pointer;
+}
+
+
+.rowlist {
+	position: relative;
+	width:100%;
+	display:flex;
+	flex-flow:row wrap;
+	justify-content: flex-start;
+}
+
+.rowlist .item {
+	width: 200px;
+    height: 200px;
+    margin: 15px;
+    overflow: hidden;
+}
+
 
 
 .form {
@@ -69,13 +96,15 @@ body {
 	padding:15px;
 }
 
-/*.form .add, .form .edit {display: none}*/
+.form .add, .form .edit {display: none}
 
 
 .form label {
 	display:block;
 }
 
+form img, .form img {width:64px;}
+#file-input {display:none;}
 .form input {
 	width:80%;
 	margin-bottom:10px;
@@ -105,7 +134,7 @@ input.delete {
 
 #lightbox-images, #lightbox-residents, #lightbox-shows {display:none;}
 
-#lightbox-images {background: red;height:300px;width:300px;}
+
 
 
 .close_window {
@@ -116,4 +145,27 @@ input.delete {
 	height:20px;
 	cursor:pointer;
 	background:red;
+}
+
+
+
+input[type='checkbox'] {
+	left: 0;
+    width: 30px;
+    display: block;
+}
+
+
+#message {
+	position: absolute;
+	top:100px;
+	left:35%;
+	width:30%;
+	min-height:300px;
+	background:rgba(0,0,0,0.6);
+	display:none;
+	font-size:30px;
+	color:red;
+	text-align: center;
+	line-height:300px;
 }

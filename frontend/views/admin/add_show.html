@@ -1,0 +1,30 @@
+<label>Show name</label>
+<input type = "text" ng-model="add_item['name']">
+
+<label>Show description</label>
+<input type = "text" ng-model="add_item['description']">
+
+<label>Show image - thumbnail</label>
+<img src = "/public/images/uploads/{{add_item['image_thumbnail']}}">
+<input type = "submit" value = "Choose image" ng-click="choose_relation(add_item, 'image_thumbnail', 'images')">
+
+<label>Show image - large</label>
+<img src = "/public/images/uploads/{{add_item['image_banner']}}">
+<input type = "submit" value = "Choose image" ng-click="choose_relation(add_item, 'image_banner', 'images')">
+
+<label>Show date</label>
+<input type = "date" ng-model="add_item['date']">
+
+<label>Show frequency</label>
+
+<select ng-model="add_item['frequency']">
+	<option ng-selected="add_item['frequency'] == 'daily'">Daily</option>
+	<option ng-selected="add_item['frequency'] == 'weekly'">Weekly</option>
+	<option ng-selected="add_item['frequency'] == 'monthly'">Monthly</option>
+</select>
+
+
+<label>Show featured</label>
+<input type = "checkbox" ng-model="add_item['featured']">
+
+<input type = "submit" value = "Save" ng-click="save()">

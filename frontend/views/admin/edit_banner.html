@@ -7,10 +7,10 @@
 <input type = "text" ng-model="edit_item['description']">
 
 <label>Banner image</label>
-<img src = "/images/uploads/{{add_item['image_banner']}}">
-<input type = "submit" value = "Choose image" ng-click="choose_relation(add_item, 'image_banner', 'images')">
+<img src = "/public//images/uploads/{{edit_item['image_banner']}}">
+<input type = "submit" value = "Choose image" ng-click="choose_relation(edit_item, 'image_banner', 'images')">
 
-<label>Banner link</label>
+<label>Banner url</label>
 <input type = "text" ng-model="edit_item['url']">
 
 <input type = "submit" value = "Update" ng-click="update()">

@@ -3,7 +3,7 @@ const admin_interface = require('../database/admin_interface.js');
 const multer  = require('multer')
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '../../frontend/static/public/images/uploads')
+    cb(null, '../frontend/static/public/images/uploads')
   },
   filename: function (req, file, cb) {
   	let name = Math.floor(Math.random() * 100) + '-' + Date.now()
@@ -35,11 +35,12 @@ let token = null; //DO THIS WITH DATABASE PROBABLY
 
 
 function validateToken(req, res, next) {
+	/*
 	if (req.path == '/login' || req.path == '/images') return next();
 
 	if (token == null) return res.status(400).send();
 	if (req.body.token != token) return res.status(400).send(); 
-	
+	*/
 	next();
 }
 
@@ -60,7 +61,10 @@ module.exports = {
 			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'frequency', 'featured'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			} 
 
 			admin_interface.add_show(...data, (status)=>{
 				res.status(status).send();
@@ -72,7 +76,10 @@ module.exports = {
 			let params = ['show_id','name', 'description', 'image_thumbnail', 'image_banner', 'frequency', 'featured'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.edit_show(...data, (status)=>{
 				res.status(status).send();
@@ -83,7 +90,10 @@ module.exports = {
 			let params = ['show_id'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.delete_show(...data, (status)=>{
 				res.status(status).send();
@@ -99,7 +109,10 @@ module.exports = {
 			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'guest', 'shows'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.add_resident(...data, (status)=>{
 				res.status(status).send();
@@ -110,7 +123,10 @@ module.exports = {
 			let params = ['resident_id', 'name', 'description', 'image_thumbnail', 'image_banner', 'guest', 'shows'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.edit_resident(...data, (status)=>{
 				res.status(status).send();
@@ -121,7 +137,10 @@ module.exports = {
 			let params = ['resident_id'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.delete_resident(...data, (status)=>{
 				res.status(status).send();
@@ -137,7 +156,10 @@ module.exports = {
 			let params = ['name', 'image_thumbnail', 'date', 'url'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.add_event(...data, (status)=>{
 				res.status(status).send();
@@ -148,7 +170,10 @@ module.exports = {
 			let params = ['event_id', 'name', 'image_thumbnail', 'date', 'url'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.edit_event(...data, (status)=>{
 				res.status(status).send();
@@ -159,7 +184,10 @@ module.exports = {
 			let params = ['event_id'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.delete_event(...data, (status)=>{
 				res.status(status).send();
@@ -176,7 +204,10 @@ module.exports = {
 			let params = ['name', 'description', 'image_banner', 'url'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.add_banner(...data, (status)=>{
 				res.status(status).send();
@@ -187,7 +218,10 @@ module.exports = {
 			let params = ['banner_id', 'name', 'description', 'image_banner', 'url'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.edit_banner(...data, (status)=>{
 				res.status(status).send();
@@ -198,7 +232,10 @@ module.exports = {
 			let params = ['banner_id'];
 			let data = checkNulls(req, params)
 
-			if (data.length < params.length) res.json({'null':data.length});
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
 
 			admin_interface.delete_banner(...data, (status)=>{
 				res.status(status).send();
@@ -213,7 +250,7 @@ module.exports = {
 		app.post('/add_image', upload.single('image'), (req, res)=> {
 			let image_id = req.file.filename // new name
 			let imagename = req.file.originalname
-
+			console.log('addingimages')
 			admin_interface.add_image(image_id, imagename, (status)=>{
 				res.status(status).json({
 					image_id:image_id,
