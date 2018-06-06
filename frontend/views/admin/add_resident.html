@@ -1,0 +1,34 @@
+<label>Resident name</label>
+<input type = "text" ng-model="add_item['name']">
+
+<label>Resident description</label>
+<input type = "text" ng-model="add_item['description']">
+
+<label>Resident image - thumbnail</label>
+<img src = "/public/images/uploads/{{add_item['image_thumbnail']}}">
+<input type = "submit" value = "Choose image" ng-click="choose_relation(add_item, 'image_thumbnail', 'images')">
+
+<label>Resident image - large</label>
+<img src = "/public/images/uploads/{{add_item['image_banner']}}">
+<input type = "submit" value = "Choose image" ng-click="choose_relation(add_item, 'image_banner', 'images')">
+
+
+
+
+<label>Resident shows</label>
+
+<div ng-repeat="show in add_item['shows'] track by $index" class = "tag">
+	<div>Show id: {{show.show_id}}</div>
+	<div class = "remove_field" ng-click="add_item['shows'].splice($index, 1)">-</div>
+</div>
+<input type = "submit" value = "Add a show" ng-click="choose_relation(add_item, 'shows', 'shows')">
+
+
+
+
+
+
+<label>Resident is guest</label>
+<input type = "checkbox" ng-model="add_item['guest']" ng-checked="add_item['guest']">
+
+<input type = "submit" value = "Save" ng-click="save()">

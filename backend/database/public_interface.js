@@ -91,7 +91,7 @@ function get_shows(cb) {
 
 
 				// get related resident ids
-				get_residents(r, ()=> {
+				get_residents_2(r, ()=> {
 					if (index >= num_rows * 3) {
 						cb(rows);
 						closedatabase(db);
@@ -115,9 +115,9 @@ function get_shows(cb) {
 
 
 
-			function get_residents(r, done) {
-				console.log(r.show_id);
-				db.all("SELECT * FROM EPISODE_RESIDENT WHERE show_id = ?", [r.show_id], (err, rows)=> {
+			function get_residents_2(r, done) {
+				
+				db.all("SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE show_id = ?", [r.show_id], (err, rows)=> {
 					if (rows == undefined) {
 						r.residents = [];
 						index += 1;
@@ -167,8 +167,14 @@ function get_residents(cb) {
 			let num_rows = rows.length;
 			let index = 0;
 
+			if (index >= num_rows) {
+				cb(rows);
+				closedatabase(db);
+			}
+
 			for (var r of rows) {
-				get_shows(r, ()=> {
+				get_shows_2(r, ()=> {
+					index += 1;
 					if (index >= num_rows) {
 						cb(rows);
 						closedatabase(db);
@@ -178,13 +184,17 @@ function get_residents(cb) {
 		});	
 
 
-		function get_shows(r, done) {
-			let show_sql = 'SELECT * FROM EPISODE_RESIDENT WHERE resident_id = ?'
+		function get_shows_2(r, done) {
+			let show_sql = 'SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE resident_id = ?'
 
 			db.all(show_sql, [r.resident_id], (err, rows)=> {
+				if (rows == undefined) {
+					r.shows = [];
+					done();
+					return;
+				}
 				get_list_of_shows(rows, (shows)=>{
 					r.shows = shows;
-					index += 1;
 					done();
 				});
 			})
@@ -192,7 +202,7 @@ function get_residents(cb) {
 		}	
 
 		function get_list_of_shows(shows, cb) {
-			let index = 0;
+	
 			let max = shows.length;
 			let data = [];
 

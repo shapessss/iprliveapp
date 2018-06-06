@@ -10,31 +10,18 @@ app.controller("administration", function($scope, $http, $route) {
 	$scope.show_template = 'show_lightbox.html';
 
 
-	$scope.add_item = {};
-	$scope.edit_item = {};
-
-	//special if shows 
-	if ($scope.item_type == 'show') {
-		$scope.add_item = {
-			tags:[],
-			tracks:[],
-			residents:[]
-		}
-		$scope.edit_item = {
-			tags:[],
-			tracks:[],
-			residents:[]
-		}
-	} else if ($scope.item_type == 'resident') {
-
-		$scope.add_item = {
-			shows:[]
-		}
-		$scope.edit_item = {
-			shows:[]
-		}
-		
-	}
+	$scope.add_item = {
+		tags:[],
+		tracks:[],
+		residents:[],
+		shows:[]
+	};
+	$scope.edit_item = {
+		tags:[],
+		tracks:[],
+		residents:[],
+		shows:[]
+	};
 
 
 	//set up token
@@ -147,7 +134,19 @@ app.controller("administration", function($scope, $http, $route) {
 	}
 
 	$scope.select_relation = function(item_id) {
-		$scope.choose_relation_data[$scope.choose_relation_field] = item_id;
+		//if shows or residents then its an array
+		if ($scope.choose_relation_field == 'residents') {
+			$scope.choose_relation_data[$scope.choose_relation_field].push({
+				'resident_id':item_id
+			});
+		} else if ($scope.choose_relation_field == 'shows') {
+			$scope.choose_relation_data[$scope.choose_relation_field].push({
+				'show_id':item_id
+			});
+		} else {
+			//else image which is singular
+			$scope.choose_relation_data[$scope.choose_relation_field] = item_id;
+		}
 	}
 
 
@@ -163,7 +162,8 @@ app.controller("administration", function($scope, $http, $route) {
 					
 				}
 			}
-			
+			console.log("items here")
+			console.log(data.data.items);
 			$scope.items = data.data.items;
 		}, 
 		(err)=> {

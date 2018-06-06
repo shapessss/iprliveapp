@@ -1,7 +1,12 @@
-<div class = "listing">
+<div class = "rowlist">
 
-	<div class = "item" ng-repeat = "resident in residents">
+	<div class = "item"
+	 ng-repeat = "resident in residents"
+	 ng-click="select_relation(resident.resident_id)"
+	 onclick="$(this.parentNode.parentNode.parentNode).fadeOut();">
 		{{resident.name}}
 	</div>
+
+	
 
 </div>

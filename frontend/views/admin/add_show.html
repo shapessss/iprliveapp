@@ -14,7 +14,7 @@
 
 <label>Show tags</label>
 <div ng-repeat="tag in add_item['tags'] track by $index" class = "tag">
-	<input type = "text" placeholder = "Tags" ng-model="add_item['tags'][$index]['tag']">
+	<input type = "text" placeholder = "Tag" ng-model="add_item['tags'][$index]['tag']">
 	<div class = "remove_field" ng-click="add_item['tags'].splice($index, 1)">-</div>
 </div>
 <button ng-click="more_fields(add_item['tags'])">+</button>
@@ -26,6 +26,15 @@
 	<div class = "remove_field" ng-click="add_item['tracks'].splice($index, 1)">-</div>
 </div>
 <button ng-click="more_fields(add_item['tracks'])">+</button>
+
+
+<label>Show residents</label>
+
+<div ng-repeat="resident in add_item['residents'] track by $index" class = "tag">
+	<div>Resident id: {{resident.resident_id}}</div>
+	<div class = "remove_field" ng-click="add_item['residents'].splice($index, 1)">-</div>
+</div>
+<input type = "submit" value = "Add a resident" ng-click="choose_relation(add_item, 'residents', 'residents')">
 
 
 
@@ -42,6 +51,6 @@
 
 
 <label>Show featured</label>
-<input type = "checkbox" ng-model="add_item['featured']">
+<input type = "checkbox" ng-model="add_item['featured']" ng-checked="add_item['featured']">
 
 <input type = "submit" value = "Save" ng-click="save()">

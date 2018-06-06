@@ -1,0 +1,16 @@
+<label>Event name</label>
+<input type = "text" ng-model="edit_item['name']">
+
+<label>Event image</label>
+<img src = "/public/images/uploads/{{edit_item['image_thumbnail']}}">
+<input type = "submit" value = "Choose image" ng-click="choose_relation(edit_item, 'image_thumbnail', 'images')">
+
+<label>Show date</label>
+<input type = "date" ng-model="edit_item['date']">
+
+<label>Event link</label>
+<input type = "text" ng-model="edit_item['url']">
+
+<input type = "submit" value = "Update" ng-click="update()">
+
+<input type = "submit" value = "Delete" ng-click="delete()" class="delete">

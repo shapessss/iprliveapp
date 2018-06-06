@@ -15,6 +15,14 @@ app.config(function($routeProvider, $locationProvider) {
 	    	templateUrl:'administration.html',
 	    	item_type:'show'
 	    })
+	    .when("/residents", {
+	    	templateUrl:'administration.html',
+	    	item_type:'resident'
+	    })
+	    .when("/events", {
+	    	templateUrl:'administration.html',
+	    	item_type:'event'
+	    })
 	    ;
     
 

@@ -32,6 +32,15 @@
 <button ng-click="more_fields(edit_item['tracks'])">+</button>
 
 
+<label>Show residents</label>
+
+<div ng-repeat="resident in edit_item['residents'] track by $index" class = "tag">
+	<div>Resident id: {{resident.resident_id}}</div>
+	<div class = "remove_field" ng-click="edit_item['residents'].splice($index, 1)">-</div>
+</div>
+<input type = "submit" value = "Add a resident" ng-click="choose_relation(edit_item, 'residents', 'residents')">
+
+
 
 <label>Show date</label>
 <input type = "date" ng-model="edit_item['date']">
@@ -44,7 +53,7 @@
 </select>
 
 <label>Show featured</label>
-<input type = "checkbox" ng-model="edit_item['featured']">
+<input type = "checkbox" ng-model="edit_item['featured']" ng-checked="edit_item['featured']">
 
 <input type = "submit" value = "Update" ng-click="update()">
 
