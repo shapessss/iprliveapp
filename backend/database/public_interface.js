@@ -73,9 +73,15 @@ function get_shows(cb) {
 			let num_rows = rows.length;
 			let index = 0;
 
+			if (num_rows == 0) {
+				cb(rows);
+				closedatabase(db);
+			}
+
 			for (var r of rows) {
 				
 				get_related(r, tags_sql, 'tags', ()=>{
+					console.log('get tags')
 					if (index >= num_rows * 3) {
 						cb(rows);
 						closedatabase(db);
@@ -83,6 +89,7 @@ function get_shows(cb) {
 				})
 
 				get_related(r, tracks_sql, 'tracks', ()=>{
+					console.log('get tracks')
 					if (index >= num_rows * 3) {
 						cb(rows);
 						closedatabase(db);
@@ -92,6 +99,7 @@ function get_shows(cb) {
 
 				// get related resident ids
 				get_residents_2(r, ()=> {
+					console.log('get residents')
 					if (index >= num_rows * 3) {
 						cb(rows);
 						closedatabase(db);
@@ -118,7 +126,7 @@ function get_shows(cb) {
 			function get_residents_2(r, done) {
 				
 				db.all("SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE show_id = ?", [r.show_id], (err, rows)=> {
-					if (rows == undefined) {
+					if (rows == undefined || rows.length == 0) {
 						r.residents = [];
 						index += 1;
 						done();
@@ -167,7 +175,7 @@ function get_residents(cb) {
 			let num_rows = rows.length;
 			let index = 0;
 
-			if (index >= num_rows) {
+			if (num_rows == 0) {
 				cb(rows);
 				closedatabase(db);
 			}
@@ -188,7 +196,7 @@ function get_residents(cb) {
 			let show_sql = 'SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE resident_id = ?'
 
 			db.all(show_sql, [r.resident_id], (err, rows)=> {
-				if (rows == undefined) {
+				if (rows == undefined || rows.length == 0) {
 					r.shows = [];
 					done();
 					return;

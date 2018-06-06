@@ -1,0 +1,2 @@
+when you add an item in admin
+then immediately try edit, there is no item_id so you cannot edit until you refresh the page

@@ -33,7 +33,7 @@ app.controller("administration", function($scope, $http, $route) {
 		let url = '/api/admin/add_' + $scope.item_type;
 		let data = JSON.stringify($scope.add_item);
 
-		console.log(data);
+		
 
 		$http.post(url, data)
 			.then((data)=> {
@@ -49,9 +49,10 @@ app.controller("administration", function($scope, $http, $route) {
 				} else {
 					$('#message').html("Successfully added." + html);
 					$scope.items.push($scope.add_item);
+					$('.add').fadeOut();
 				}
 
-				console.log(data);
+				
 
 				$('#message').show();
 			}, (err)=>{
@@ -106,6 +107,7 @@ app.controller("administration", function($scope, $http, $route) {
 				} else {
 					$('#message').html("Successfully deleted." + html);
 					$scope.items.splice($scope.edit_item.item_index, 1);
+					$('.edit').fadeOut();
 				}
 
 
@@ -246,4 +248,13 @@ app.controller("administration", function($scope, $http, $route) {
 
 
 })
+
+
+
+function editItem(e) {
+	$('.edit').fadeIn();
+	$('.add').fadeOut();
+	$('.item').removeClass("selected")
+	e.classList.add("selected");
+}
 

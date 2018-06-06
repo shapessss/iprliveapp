@@ -398,15 +398,16 @@ function get_images(cb) {
 /* --------------------- SHOW-RESIDENT-RELATION ------------------------------ */
 /* --------------------- ------- --------------------------------------------- */
 //this is when a SHOW is being updated
-function update_show_resident_relations(show_id, residents) {
+function update_show_resident_relations(show_id, residents, cb) {
 	let del_sql = 'DELETE FROM SHOW_RESIDENT_RELATIONSHIPS WHERE show_id = ?';
 	getdatabase((db)=> {
 		db.run(del_sql, [show_id], (err)=> {
+			cb(); //deleted
 			//now add
 			
 			let add_sql = 'INSERT INTO SHOW_RESIDENT_RELATIONSHIPS (show_id, resident_id) VALUES (?,?);'
 			for (var r of residents) {
-				db.run(add_sql, [show_id, r], (err)=>{
+				db.run(add_sql, [show_id, r.resident_id], (err)=>{
 					
 				})
 			}
@@ -428,7 +429,7 @@ function update_resident_show_relations(resident_id, shows, cb) {
 			console.log(shows);
 			let add_sql = 'INSERT INTO SHOW_RESIDENT_RELATIONSHIPS (show_id, resident_id) VALUES (?,?);'
 			for (var r of shows) {
-				db.run(add_sql, [r, resident_id], (err)=>{
+				db.run(add_sql, [r.show_id, resident_id], (err)=>{
 					
 				})
 			}
@@ -440,7 +441,6 @@ function update_resident_show_relations(resident_id, shows, cb) {
 
 module.exports = {
 	add_show : function(name, description, image_thumbnail, image_banner, date, frequency, featured, tracks, tags, residents, cb) {
-		console.log(date);
 		add_show(name, description, image_thumbnail, image_banner, date, frequency, featured, cb, (show_id)=> {
 			update_tracklist(show_id, tracks, ()=>{});
 			update_tags(show_id, tags, ()=>{});
