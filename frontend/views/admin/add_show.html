@@ -12,6 +12,23 @@
 <img src = "/public/images/uploads/{{add_item['image_banner']}}">
 <input type = "submit" value = "Choose image" ng-click="choose_relation(add_item, 'image_banner', 'images')">
 
+<label>Show tags</label>
+<div ng-repeat="tag in add_item['tags'] track by $index" class = "tag">
+	<input type = "text" placeholder = "Tags" ng-model="add_item['tags'][$index]['tag']">
+	<div class = "remove_field" ng-click="add_item['tags'].splice($index, 1)">-</div>
+</div>
+<button ng-click="more_fields(add_item['tags'])">+</button>
+
+<label>Show tracks</label>
+<div ng-repeat="track in add_item['tracks'] track by $index" class = "track">
+	<input type = "text" placeholder = "Artist" ng-model="track['artist']">
+	<input type = "text" placeholder = "Title" ng-model="track['title']">
+	<div class = "remove_field" ng-click="add_item['tracks'].splice($index, 1)">-</div>
+</div>
+<button ng-click="more_fields(add_item['tracks'])">+</button>
+
+
+
 <label>Show date</label>
 <input type = "date" ng-model="add_item['date']">
 

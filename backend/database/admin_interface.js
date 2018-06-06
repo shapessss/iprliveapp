@@ -47,24 +47,33 @@ function closedatabase(db) {
 /* --------------------- ---- ------------------------------ */
 /* --------------------- SHOW ------------------------------ */
 /* --------------------- ---- ------------------------------ */
-function add_show(name, description, image_thumbnail, image_banner, frequency, featured=0, cb) {
+function add_show(name, description, image_thumbnail, image_banner, date, frequency, featured, cb, cbid) {
 	//change true/false to 1/0
-	if (featured == 'true') {
+	if (featured == true) {
 		featured = 1;
 	} else {
 		featured = 0;
 	}
 
 
-	let sql = 'INSERT INTO SHOWS(name, description, image_thumbnail, image_banner, frequency, featured) VALUES(?,?,?,?,?,?);';
+	let sql = 'INSERT INTO SHOWS(name, description, image_thumbnail, image_banner, date, frequency, featured) VALUES(?,?,?,?,?,?,?);';
 
 	getdatabase((db) => {
-		db.run(sql, [name, description, image_thumbnail, image_banner, frequency, featured], (err) => {
+		db.run(sql, [name, description, image_thumbnail, image_banner, date, frequency, featured], (err) => {
 			console.log(err);
 			if (err) {
 				cb(409);
 			} else {
-				cb(200)
+				cb(200);
+
+				db.get("select last_insert_rowid();", (err, row)=> {
+					
+					cbid(row['last_insert_rowid()']);
+				})
+
+
+
+
 			}
 		})
 		closedatabase(db)
@@ -125,20 +134,16 @@ function delete_show(show_id, cb) {
 /* --------------------- --------- ------------------------------ */
 /* --------------------- TRACKLIST ------------------------------ */
 /* --------------------- --------- ------------------------------ */
-function update_tracklist(show_id, tracks, cb) {
+function update_tracklist(show_id, tracks) {
 	let del_sql = 'DELETE FROM TRACKS WHERE show_id = ?';
 	getdatabase((db)=> {
 		db.run(del_sql, [show_id], (err) => {
 			//add new tracks
-			let index = 0;
-			let maximum = tracks.length;
+			
 			let add_sql = 'INSERT INTO TRACKS (show_id, title, artist) VALUES (?,?,?);'
 			for (var t of tracks) {
 				db.run(add_sql, [show_id, t['title'], t['artist']], (err)=> {
-					index += 1;
-					if (index >= maximum) {
-						cb(200);
-					}
+					
 				})
 			}
 		})
@@ -150,20 +155,16 @@ function update_tracklist(show_id, tracks, cb) {
 /* --------------------- --------- ------------------------------ */
 /* --------------------- TAGS ----------------------------------- */
 /* --------------------- --------- ------------------------------ */
-function update_tags(show_id, tags, cb) {
+function update_tags(show_id, tags) {
 	let del_sql = 'DELETE FROM TAGS WHERE show_id = ?';
 	getdatabase((db)=> {
 		db.run(del_sql, [show_id], (err) => {
 			//add new tags
-			let index = 0;
-			let maximum = tags.length;
+			
 			let add_sql = 'INSERT INTO TAGS (show_id, tag) VALUES (?,?);'
 			for (var t of tags) {
 				db.run(add_sql, [show_id, t['tag']], (err)=> {
-					index += 1;
-					if (index >= maximum) {
-						cb(200);
-					}
+					
 				})
 			}
 		})
@@ -390,20 +391,16 @@ function get_images(cb) {
 /* --------------------- SHOW-RESIDENT-RELATION ------------------------------ */
 /* --------------------- ------- --------------------------------------------- */
 //this is when a SHOW is being updated
-function update_show_resident_relations(show_id, residents, cb) {
+function update_show_resident_relations(show_id, residents) {
 	let del_sql = 'DELETE FROM SHOW_RESIDENT_RELATIONSHIPS WHERE show_id = ?';
 	getdatabase((db)=> {
 		db.run(del_sql, [show_id], (err)=> {
 			//now add
-			let index = 0;
-			let maximum = residents.length;
+			
 			let add_sql = 'INSERT INTO SHOW_RESIDENT_RELATIONSHIPS (show_id, resident_id) VALUES (?,?);'
 			for (var r of residents) {
 				db.run(add_sql, [show_id, r.resident_id], (err)=>{
-					index += 1;
-					if (index >= maximum) {
-						cb(200);
-					}
+					
 				})
 			}
 		})
@@ -438,14 +435,17 @@ function update_resident_show_relations(resident_id, shows, cb) {
 
 
 module.exports = {
-	add_show : function(name, description, image_thumbnail, image_banner, frequency, featured, tracks, tags, residents, cb) {
-		add_show(name, description, image_thumbnail, image_banner, frequency, featured, cb);
+	add_show : function(name, description, image_thumbnail, image_banner, date, frequency, featured, tracks, tags, residents, cb) {
+		console.log(date);
+		add_show(name, description, image_thumbnail, image_banner, date, frequency, featured, cb, (show_id)=> {
+			update_tracklist(show_id, tracks);
+			update_tags(show_id, tags);
+			update_show_resident_relations(show_id, residents);
+		});
 
-		update_tracklist(show_id, tracks);
-		update_tags(show_id, tags);
-		update_show_resident_relations(show_id, residents);
+		
 	},
-	edit_show : function(show_id, name, description, image_thumbnail, image_banner, frequency, featured, tracks, tags, residents, cb) {
+	edit_show : function(show_id, name, description, image_thumbnail, image_banner, date, frequency, featured, tracks, tags, residents, cb) {
 		edit_show(show_id, name, description, image_thumbnail, image_banner, frequency, featured, cb);
 
 		update_tracklist(show_id, tracks);

@@ -5,7 +5,7 @@
 			<div class = "item new" onclick="$('.add').fadeIn();$('.edit').fadeOut();">+</div>
 
 
-			<div class = "item" ng-repeat = "item in items" onclick="$('.edit').fadeIn();$('.add').fadeOut();" ng-click="loadEditForm(item)">
+			<div class = "item" ng-repeat = "item in items" onclick="$('.edit').fadeIn();$('.add').fadeOut();" ng-click="loadEditForm(item, $index)">
 				{{item.name}}
 			</div>
 

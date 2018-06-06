@@ -12,6 +12,31 @@ app.controller("administration", function($scope, $http, $route) {
 
 	$scope.add_item = {};
 	$scope.edit_item = {};
+
+	//special if shows 
+	if ($scope.item_type == 'show') {
+		$scope.add_item = {
+			tags:[],
+			tracks:[],
+			residents:[]
+		}
+		$scope.edit_item = {
+			tags:[],
+			tracks:[],
+			residents:[]
+		}
+	} else if ($scope.item_type == 'resident') {
+
+		$scope.add_item = {
+			shows:[]
+		}
+		$scope.edit_item = {
+			shows:[]
+		}
+		
+	}
+
+
 	//set up token
 	//get token and add to dictionaries
 
@@ -36,6 +61,7 @@ app.controller("administration", function($scope, $http, $route) {
 					
 				} else {
 					$('#message').html("Successfully added." + html);
+					$scope.items.push($scope.add_item);
 				}
 
 				console.log(data);
@@ -80,7 +106,7 @@ app.controller("administration", function($scope, $http, $route) {
 		console.log(data);
 		$http.post(url, data)
 			.then((data)=> {
-				console.log(data);
+				
 				let html = `
 					<div class = "close_window" onclick="$(this.parentNode).fadeOut('fast');"></div>
 					`;
@@ -92,6 +118,7 @@ app.controller("administration", function($scope, $http, $route) {
 					
 				} else {
 					$('#message').html("Successfully deleted." + html);
+					$scope.items.splice($scope.edit_item.item_index, 1);
 				}
 
 
@@ -127,6 +154,16 @@ app.controller("administration", function($scope, $http, $route) {
 	//get current object
 	$http.get('/api/public/' + $scope.item_type + 's')
 		.then((data)=> {
+			//convert date if there
+			if (data.data.items.length > 0) {
+				if (data.data.items[0].date != undefined) {
+					for (var d of data.data.items) {
+						d.date = new Date(d.date);
+					}
+					
+				}
+			}
+			
 			$scope.items = data.data.items;
 		}, 
 		(err)=> {
@@ -197,9 +234,15 @@ app.controller("administration", function($scope, $http, $route) {
 
 
 	//loading an edit form with correct data
-	$scope.loadEditForm = function(item) {
+	$scope.loadEditForm = function(item, index) {
 		$scope.edit_item = item;
+		$scope.edit_item['item_index'] = index;
 	}
+
+
+	$scope.more_fields = function(data) {
+        data.push({})
+    }
 
 
 })
