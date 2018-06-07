@@ -35,7 +35,7 @@ function checkNulls(req, keys) {
 
 
 function validateToken(req, res, next) {
-	console.log(req.body)
+	
 	if (req.path == '/login' || req.path == '/images') return next();
 
 	if (!req.headers.authorization) return res.status(301).send('/admin/login')
@@ -45,10 +45,10 @@ function validateToken(req, res, next) {
 	try {
 		payload = jwt.verify(token, 'randomhash');
 	} catch (error) {
-		console.log(error);
+		
 		return res.status(301).send('/admin/login')
 	}
-	console.log(payload);
+	
 	next();
 }
 
