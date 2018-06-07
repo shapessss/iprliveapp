@@ -31,16 +31,24 @@ function checkNulls(req, keys) {
 }
 
 
-let token = null; //DO THIS WITH DATABASE PROBABLY
+
 
 
 function validateToken(req, res, next) {
-	/*
+	console.log(req.body)
 	if (req.path == '/login' || req.path == '/images') return next();
 
-	if (token == null) return res.status(400).send();
-	if (req.body.token != token) return res.status(400).send(); 
-	*/
+	if (!req.headers.authorization) return res.status(301).send('/admin/login')
+	
+	let token = req.headers.authorization.split(' ')[1];
+	let payload;
+	try {
+		payload = jwt.verify(token, 'randomhash');
+	} catch (error) {
+		console.log(error);
+		return res.status(301).send('/admin/login')
+	}
+	console.log(payload);
 	next();
 }
 
@@ -66,8 +74,11 @@ module.exports = {
 				return;
 			} 
 
-			admin_interface.add_show(...data, (status)=>{
-				res.status(status).send();
+			admin_interface.add_show(...data, (status, data=null)=>{
+				res.status(status).json({
+					item_id:data,
+					item_type:'show_id'
+				})
 			})
 		});
 
@@ -114,8 +125,11 @@ module.exports = {
 				return;
 			}
 
-			admin_interface.add_resident(...data, (status)=>{
-				res.status(status).send();
+			admin_interface.add_resident(...data, (status, data=null)=>{
+				res.status(status).json({
+					item_id:data,
+					item_type:'resident_id'
+				})
 			})
 		})
 
@@ -161,8 +175,11 @@ module.exports = {
 				return;
 			}
 
-			admin_interface.add_event(...data, (status)=>{
-				res.status(status).send();
+			admin_interface.add_event(...data, (status, data=null)=>{
+				res.status(status).json({
+					item_id:data,
+					item_type:'event_id'
+				})
 			})
 		})
 
@@ -209,8 +226,11 @@ module.exports = {
 				return;
 			}
 
-			admin_interface.add_banner(...data, (status)=>{
-				res.status(status).send();
+			admin_interface.add_banner(...data, (status, data=null)=>{
+				res.status(status).json({
+					item_id:data,
+					item_type:'banner_id'
+				})
 			})
 		})
 
@@ -231,6 +251,8 @@ module.exports = {
 		app.post('/delete_banner', (req, res)=> {
 			let params = ['banner_id'];
 			let data = checkNulls(req, params)
+
+			console.log(req.body)
 
 			if (data.length < params.length) {
 				res.json({'missingdata':params[data.length]});
@@ -269,11 +291,16 @@ module.exports = {
 
 	login_routing: function(app) {
 		app.post('/login', (req, res)=> {
+			
 			if (req.body.username == "admin" && req.body.password == "admin") {
-				token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+				let token = jwt.sign(req.body.username, 'randomhash');
 				
 				res.json({
 					'token':token
+				})
+			} else {
+				res.json({
+					'token':null
 				})
 			}
 
@@ -281,7 +308,7 @@ module.exports = {
 
 		app.post('/logout', (req, res)=> {
 			token = null;
-			res.send();
+			res.status(200).send();
 		});
 	}
 }
