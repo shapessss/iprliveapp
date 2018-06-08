@@ -1,0 +1,110 @@
+@media all and (max-width: 750px) {
+#banner {
+	height:auto;
+}
+.banner_image {
+	display:block;
+	position: relative;
+	height:auto;
+}
+
+
+#banner .about {
+	
+}
+
+#banner .description-carousel {
+	top: auto;
+    bottom: 0;
+}
+
+#banner #banner_navigation {
+	display: none;
+}
+
+
+#navigation {height:auto;}
+
+#navigation .item {width:100%;}
+
+
+#mobile_navigation {
+	display:block;
+	height:60px;
+}
+
+#logo {display:none;}
+
+#mobile_navigation #mobile_logo {
+	height:100%;
+	width:auto; /* width and height will be 60px (nav is 60 tall) */
+}
+
+#mobile_navigation .dropdown {
+	height: 60px;
+    width: 60px;
+    right: 0;
+    top: 0;
+    position: absolute;
+    line-height: 60px;
+    text-align: center;
+    font-size: 30px;
+}
+
+#pause_play, #now_playing, .navigation-inner, .navigation-inner .search, .navigation-inner .fa-search {
+	display:none;
+}
+
+#mobile_navigation .search, #navigation .navigation-inner .social-icons {
+	position: absolute;
+	left:80px;
+	bottom:10px;
+    height: 15px;
+  
+    width: calc(100% - 180px);
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px solid #fff;
+    color: #fff;
+    text-indent: 15px;
+    font-family: 'okomitomedium';
+
+}
+
+#mobile_navigation .fa-search {
+	position: absolute;
+    left: calc(100% - 90px);
+    bottom: 10px;
+}
+
+
+
+#navigation .navigation-inner .social-icons {
+	position: absolute;
+    left: 65px;
+    bottom: 10px;
+    height: 15px;
+    width: calc(100% - 130px);
+    background-color: transparent;
+    border: 0;
+    
+    color: #fff;
+    margin:0;
+    font-family: 'okomitomedium';
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+#navigation .navigation-inner .social-icons .right-nav {
+	width:auto;
+	float:none;
+}
+
+#navigation .navigation-inner {
+	height:auto;
+	margin-bottom:20px;
+}
+
+}
+
+

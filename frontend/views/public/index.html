@@ -8,21 +8,108 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-
-
+	<!------------=====  CSS ====------------>
 	<link rel="stylesheet" type="text/css" href="public/styles/stylesheet.css">
+	<link rel="stylesheet" type="text/css" href="public/styles/mobile_stylesheet.css">
+	<link rel="stylesheet" type="text/css" href="public/styles/desktop_stylesheet.css">
+	<link rel="stylesheet" type="text/css" href="public/styles/animations.css">
 
+
+	<!-- FONT AWESOME -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+
+	<!------------====  FONTS ====------------>
+	<link rel="stylesheet" href="public/styles/webfonts/stylesheet.css" type="text/css" charset="utf-8" />
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<base href = "/">
 </head>
 <body ng-app="radio">
 
+<!------------===== N A V I G A T I O N ====------------>
+<div id="navigation">
+
+	<!------------==== MOBILE NAVIGATION BAR ====------------>
+  <div id = "mobile_navigation">
+	<a href = "#"><img id = "mobile_logo" src = "public/images/main/logo.png"></a>
+	<input type="text" class="search" placeholder="search"><i class = "fas fa-search"></i>
+	<div class = "dropdown fas fa-bars"></div>
+  </div>
+
+  <div class = "navigation-inner">
+	  <a href = "index.html"><img id = "logo" src = "public/images/main/logo.png"></a>
+	  <a href = "residents.html" class="item menu">Residents</a>
+	  <a href = "guests.html" class="item menu">Guests</a>
+	  <a href = "schedule.html" class="item menu">Schedule</a>
+	  <a href = "about.html" class="item menu">About</a>
+	  <a href = "https://iprlive.tictail.com/RSQWn" class="item menu">Shop</a>
+
+	  <!-- media player -->
+	  <i class = "fas fa-play item"></i>
+	  <div id = "media" class = "item">Now live: loading..</div>
+	
+
+	  <!-- search function -->
+	  <input type="text" class="search" placeholder="search"><i class = "fas fa-search"></i>
+	  <!-- social icons -->
+	  <div class="social-icons">
+    	<a href="http://donorbox.org/iprlive" target="blank"  class = "fas fa-donate right-nav"></a>
+		<a href="https://www.instagram.com/internetpublicradio/" target="blank" class = "fab fa-instagram right-nav"></a>
+		<a href="https://www.facebook.com/InternetPublicRadio/" target="blank" class = "fab fa-facebook right-nav"></a>
+		<a href="https://www.mixcloud.com/internetpublicradio/" target="blank" class = "fab fa-mixcloud right-nav"></a>
+		<a href="https://twitter.com/internetpradio" target="blank" class = "fab fa-twitter right-nav"></a>
+	  </div>
+  </div>
+</div>
+
+
+
 <div ng-view></div>
 
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
 
-<script src = "public/js/routing.js"></script>
-<script src = "public/js/controllers.js"></script>
+
+<!-----------===- M I X C L O U D  ====------------>
+<div id = "mixcloud">
+	<div id = "hide_mixcloud">Hide song</div>
+</div>
+
+
+<!-----------===- F O O T E R  ====------------>
+<footer class="footer" id="footer">
+  <div class="footer__inner">
+	<div class="credit">
+	  <p>
+		Audio stream <a href="#">here</a>
+	  </p>
+	  <p>
+		/ website by <a href="mailto:josh.e.fielding@gmail.com?Subject=hello%20friend">G&J</a>
+	  </p>
+	</div>
+  </div>
+</footer>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+
+	<script src = "public/js/paint.js"></script>
+	<script src = "public/js/load_mixcloud.js"></script>
+	<script src = "public/js/mobile_dropdown.js"></script>
+
+	<script src = "public/js/routing.js"></script>
+	<script src = "public/js/controllers.js"></script>
+
+
+</body>
 </html>
+
+
+

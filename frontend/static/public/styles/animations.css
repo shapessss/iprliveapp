@@ -1,0 +1,107 @@
+/* CURRENTLY PLAYING SONG */
+.scrolling {
+    -webkit-animation:linear infinite;
+    -webkit-animation-name: scroll_text;
+    -webkit-animation-duration: 15s;
+}
+
+@-webkit-keyframes scroll_text {
+    0% { left: 100%;}
+    100%{ left: 0;}
+}
+
+
+
+
+
+
+
+
+
+
+/* BANNER IMAGES SCROLL ANIMATIONS */
+/* for current */
+.current_scroll_prev {
+    display:block !important;
+
+    animation-name:current_scroll_prev;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes current_scroll_prev {
+    0% {
+        top:0;
+        left:0;
+    }
+    100% {
+        top:0;
+        left:100%;
+    }
+}
+
+
+/* for next */
+.prev_scroll_prev {
+    display:block !important;
+
+    animation-name:prev_scroll_prev;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes prev_scroll_prev {
+    0% {
+        top:0;
+        left:-100%;
+    }
+    100% {
+        top:0;
+        left:0;
+    }
+}
+
+
+
+/* for current */
+.current_scroll_next {
+	display:block !important;
+
+	animation-name:current_scroll_next;
+	animation-duration: 1s;
+	animation-fill-mode: forwards;
+}
+
+@keyframes current_scroll_next {
+    0% {
+    	top:0;
+    	right:0;
+    }
+    100% {
+    	top:0;
+    	right:100%;
+    }
+}
+
+
+/* for next */
+.next_scroll_next {
+    display:block !important;
+
+    animation-name:next_scroll_next;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes next_scroll_next {
+    0% {
+        top:0;
+        left:100%;
+    }
+    100% {
+        top:0;
+        left:0;
+    }
+}
+
+

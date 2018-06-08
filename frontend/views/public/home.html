@@ -1,1 +1,109 @@
-home
+<div id = "banner" ng-controller="banners">
+
+	<div class="banner_scroll">
+
+		<div class = "banner_image {{$index == 0 ? 'current' : ''}}" ng-repeat="item in items">
+			<img src = "public/images/uploads/{{item.image_banner}}">
+
+			<div class="description-carousel">
+				<div class = "title">
+					{{item.name}}
+				</div>
+				<div class="about">
+        			{{item.description}}
+				</div>
+				<div class="listen-back">
+					<a href="{{item.url}}" target="blank">
+        			listen back
+        			</a>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div id="banner_navigation">
+		<div class="arrow fas fa-angle-left"></div>
+		<div class="arrow fas fa-angle-right"></div>
+	</div>
+</div>
+
+
+
+<div  ng-controller="shows">
+	<!-----------==== L A T E S T S H O W S ====------------>
+	<h2 class = "show_heading">Latest shows</h2>
+	<h3 class= "show_heading sub-title"> - a selection of our latest shows</h3>
+	<a href="#" class="button">all shows</a>
+	<div id = "latest" class = "featured_list">
+
+		<div class = "featured" ng-repeat = "show in latest">
+
+			<div class = "featured-image show">
+				<div class = "play fas fa-play-circle"></div>
+				<img src = "public/images/uploads/{{show.image_thumbnail}}">
+			</div>
+
+
+			<div class = "description">
+				<span class = "title"><a href = "/shows/{{show.show_id}}">{{show.name}}</a></span>
+				<span class = "genre">
+
+					<a href = "#" ng-repeat = "tag in show.tags">{{tag.tag}},</a>
+					
+				</span>
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<!-----------===- R E C O M M E N D E D ====------------>
+	<h2 class="show_heading">Recommended shows</h3>
+	<h3 class="show_heading sub-title"> - a selection of five standout shows from the week by our editors</h4>
+	<a href="recommended.html" class="button">recommended shows</a>
+
+	<div id = "recommended" class = "featured_list">
+
+		<div class = "featured" ng-repeat = "show in featured">
+			<div class = "featured-image show">
+				<div class = "play fas fa-play-circle"></div>
+				<img src = "public/images/uploads/{{show.image_thumbnail}}">
+			</div>
+
+			<div class = "description">
+				<span class = "title"><a href = "/shows/{{show.show_id}}">{{show.name}}</a></span>
+				<span class = "genre">
+
+					<a href = "#" ng-repeat = "tag in show.tags">{{tag.tag}},</a>
+					
+				</span>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<div ng-controller ="events">
+
+	<!-------------=== UPCOMING EVENTS ====------------>
+	<h2 class = "show_heading">upcoming events and news</h2>
+	<a href="#" class="button">all news and events</a>
+	<div id = "events" class = "featured_list">
+
+		<div class = "featured" ng-repeat="item in items">
+			<a class = "featured-events" href="{{item.url}}" target="blank">
+				<div class = "play events">more info</div>
+				<img src = "public/images/uploads/{{item.image_thumbnail}}">
+			</a>
+			<div class = "description">
+				<span class = "title">{{item.name}}</span>
+				<span class = "genre">{{item.date.substring(0,10)}}</span>
+			</div>
+		</div>
+	</div>
+
+</div>
