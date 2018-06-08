@@ -27,15 +27,46 @@ app.controller("administration", function($scope, $http, $route) {
 	//set up token
 	//get token and add to dictionaries
 
-	console.log($scope.item_type)
+	//validate jwt
+
+	function validate() {
+		let url = '/api/admin/add_banner';
+		let config = {
+			method:'POST',
+			url:url,
+			headers:{
+				"Authorization":"Bearer " + getToken()
+			},
+			data:{}
+		}
+
+		$http(config)
+			.then((data)=> {
+				console.log("successfuly auth")
+			}, (err)=> {
+				if (err.status >= 300 & err.status < 400) {
+					window.location.href = err.data;
+				}
+			})
+	}
+
+	validate();
+
+
+
 
 	$scope.save = function() {
 		let url = '/api/admin/add_' + $scope.item_type;
-		let data = JSON.stringify($scope.add_item);
+		let config = {
+			method:'POST',
+			url:url,
+			headers:{
+				"Authorization":"Bearer " + getToken()
+			},
+			data:$scope.add_item
+		}
 
-		
-
-		$http.post(url, data)
+		$http(config)
 			.then((data)=> {
 				let html = `
 					<div class = "close_window" onclick="$(this.parentNode).fadeOut('fast');"></div>
@@ -48,24 +79,38 @@ app.controller("administration", function($scope, $http, $route) {
 					
 				} else {
 					$('#message').html("Successfully added." + html);
-					$scope.items.push($scope.add_item);
+					let i = $scope.add_item;
+					i[data.data.item_type] = data.data.item_id;
+					$scope.items.push(i);
 					$('.add').fadeOut();
 				}
 
-				
+				console.log(data);
 
 				$('#message').show();
 			}, (err)=>{
-
+				if (err.status >= 300 & err.status < 400) {
+					window.location.href = err.data;
+				}
 			});
 	}
 
 	$scope.update = function() {
-		let url = '/api/admin/edit_' + $scope.item_type;
-		let data = JSON.stringify($scope.edit_item);
-		$http.post(url, data)
-			.then((data)=> {
 
+		let url = '/api/admin/edit_' + $scope.item_type;
+		
+
+		let config = {
+			method:'POST',
+			url:url,
+			headers:{
+				"Authorization":"Bearer " + getToken()
+			},
+			data:$scope.edit_item
+		}
+
+		$http(config)
+			.then((data)=> {
 				let html = `
 					<div class = "close_window" onclick="$(this.parentNode).fadeOut('fast');"></div>
 					`;
@@ -84,15 +129,25 @@ app.controller("administration", function($scope, $http, $route) {
 				$('#message').show();
 
 			}, (err)=>{
-
+				if (err.status >= 300 & err.status < 400) {
+					window.location.href = err.data;
+				}
 			});
 	}
 
 	$scope.delete = function() {
 		let url = '/api/admin/delete_' + $scope.item_type;
-		let data = JSON.stringify($scope.edit_item);
-		console.log(data);
-		$http.post(url, data)
+
+		let config = {
+			method:'POST',
+			url:url,
+			headers:{
+				"Authorization":"Bearer " + getToken()
+			},
+			data:$scope.edit_item
+		}
+		
+		$http(config)
 			.then((data)=> {
 				
 				let html = `
@@ -115,7 +170,9 @@ app.controller("administration", function($scope, $http, $route) {
 				$('#message').show();
 
 			}, (err)=>{
-
+				if (err.status >= 300 & err.status < 400) {
+					window.location.href = err.data;
+				}
 			});
 	}
 
@@ -258,3 +315,38 @@ function editItem(e) {
 	e.classList.add("selected");
 }
 
+
+
+
+
+
+
+
+app.controller("login", function($scope, $http) {
+
+	$scope.validate = function() {
+		console.log('validate')
+		let data = {
+			username:$scope.username,
+			password:$scope.password
+		}
+		let jdata = JSON.stringify(data);
+		$http.post('/api/admin/login', jdata)
+			.then(
+				(data)=> {
+					console.log(data)
+					window.localStorage.setItem('token', data.data.token);
+					window.location.href = '/admin/banners';
+				},
+				(err)=> {
+					console.log(err)
+				});
+	}
+});
+
+
+
+
+function getToken() {
+	return window.localStorage.getItem('token');
+}

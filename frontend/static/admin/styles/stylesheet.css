@@ -195,3 +195,21 @@ input[type='checkbox'] {
 	text-align: center;
 	line-height:300px;
 }
+
+
+
+.login {
+	margin:auto;
+	position: relative;
+	width:300px;
+	top:150px;
+	border:solid 1px black;
+	background:lightblue;
+	padding:15px;
+}
+
+.login input {
+	position: relative;
+	margin-bottom:10px;
+	width:250px;
+}

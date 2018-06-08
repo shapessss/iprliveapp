@@ -63,20 +63,16 @@ function add_show(name, description, image_thumbnail, image_banner, date, freque
 			console.log(err);
 			if (err) {
 				cb(409);
+				closedatabase(db)
 			} else {
-				cb(200);
-
 				db.get("select last_insert_rowid();", (err, row)=> {
-					
+					cb(200, row['last_insert_rowid()']);
 					cbid(row['last_insert_rowid()']);
+					closedatabase(db)
 				})
-
-
-
-
 			}
 		})
-		closedatabase(db)
+		
 	});
 }
 
@@ -188,11 +184,11 @@ function add_resident(name, description, image_thumbnail, image_banner, guest=0,
 			if (err) {
 				cb(409);
 			} else {
-				cb(200);
+				
 
 				//get last id
 				db.get("select last_insert_rowid();", (err, row)=> {
-					
+					cb(200, row['last_insert_rowid()']);
 					cbid(row['last_insert_rowid()']);
 				})
 
@@ -256,7 +252,11 @@ function add_event(name, image_thumbnail, date, url, cb) {
 			if (err) {
 				cb(409);
 			} else {
-				cb(200)
+				//get last id
+				db.get("select last_insert_rowid();", (err, row)=> {
+					cb(200, row['last_insert_rowid()']);
+					
+				})
 			}
 		})
 		closedatabase(db)
@@ -315,11 +315,15 @@ function add_banner(name, description, image_banner, url, cb) {
 		db.run(sql, [name, description, image_banner, url], (err) => {
 			if (err) {
 				cb(409);
+				closedatabase(db)
 			} else {
-				cb(200)
+				db.get("select last_insert_rowid();", (err, row)=> {
+					cb(200, row['last_insert_rowid()']);
+					closedatabase(db)
+				})
 			}
 		})
-		closedatabase(db)
+		
 	});
 }
 
@@ -370,11 +374,13 @@ function add_image(image_id, imagename, cb) {
 		db.run(sql, [image_id, imagename], (err) => {
 			if (err) {
 				cb(409);
+				closedatabase(db)
 			} else {
-				cb(200)
+				cb(200);
+				closedatabase(db);
 			}
 		})
-		closedatabase(db)
+		
 	});
 }
 
