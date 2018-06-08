@@ -7,7 +7,8 @@ app.controller('banners', function($scope, $http) {
 	$http.get('/api/public/banners')
 		.then((data)=> {
 			$scope.items = data.data.items;
-			if (window.innerWidth > 750) {
+
+			if (window.innerWidth > 750 && $scope.items.length > 0) {
                 add_banner($scope.items); //call from paint.js
                 //change height of banner based on webpage
                 document.getElementById("banner").setAttribute("style", "height:"+window.innerHeight+"px;")

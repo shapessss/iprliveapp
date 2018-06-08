@@ -47,7 +47,7 @@ function closedatabase(db) {
 /* --------------------- ---- ------------------------------ */
 /* --------------------- SHOW ------------------------------ */
 /* --------------------- ---- ------------------------------ */
-function add_show(name, description, image_thumbnail, image_banner, date, frequency, featured, cb, cbid) {
+function add_show(name, description, image_thumbnail, image_banner, date, frequency, featured, stream, cb, cbid) {
 	//change true/false to 1/0
 	if (featured == true) {
 		featured = 1;
@@ -56,10 +56,10 @@ function add_show(name, description, image_thumbnail, image_banner, date, freque
 	}
 
 
-	let sql = 'INSERT INTO SHOWS(name, description, image_thumbnail, image_banner, date, frequency, featured) VALUES(?,?,?,?,?,?,?);';
+	let sql = 'INSERT INTO SHOWS(name, description, image_thumbnail, image_banner, date, frequency, featured, stream) VALUES(?,?,?,?,?,?,?,?);';
 
 	getdatabase((db) => {
-		db.run(sql, [name, description, image_thumbnail, image_banner, date, frequency, featured], (err) => {
+		db.run(sql, [name, description, image_thumbnail, image_banner, date, frequency, featured, stream], (err) => {
 			console.log(err);
 			if (err) {
 				cb(409);
@@ -76,7 +76,7 @@ function add_show(name, description, image_thumbnail, image_banner, date, freque
 	});
 }
 
-function edit_show(show_id, name, description, image_thumbnail, image_banner, frequency, featured, cb) {
+function edit_show(show_id, name, description, image_thumbnail, image_banner, frequency, featured, stream, cb) {
 	//change true/false to 1/0
 	if (featured == 'true') {
 		featured = 1;
@@ -92,13 +92,14 @@ function edit_show(show_id, name, description, image_thumbnail, image_banner, fr
 		image_thumbnail = ?,
 		image_banner = ?,
 		frequency = ?,
-		featured = ?
+		featured = ?,
+		stream = ?
 	WHERE 
 		show_id = ?
 	`;
 
 	getdatabase((db) => {
-		db.run(sql, [name, description, image_thumbnail, image_banner, frequency, featured, show_id], (err) => {
+		db.run(sql, [name, description, image_thumbnail, image_banner, frequency, featured, stream, show_id], (err) => {
 			if (err) {
 				cb(409);
 			} else {
@@ -446,8 +447,8 @@ function update_resident_show_relations(resident_id, shows, cb) {
 
 
 module.exports = {
-	add_show : function(name, description, image_thumbnail, image_banner, date, frequency, featured, tracks, tags, residents, cb) {
-		add_show(name, description, image_thumbnail, image_banner, date, frequency, featured, cb, (show_id)=> {
+	add_show : function(name, description, image_thumbnail, image_banner, date, frequency, featured, stream, tracks, tags, residents, cb) {
+		add_show(name, description, image_thumbnail, image_banner, date, frequency, featured, stream, cb, (show_id)=> {
 			update_tracklist(show_id, tracks, ()=>{});
 			update_tags(show_id, tags, ()=>{});
 			update_show_resident_relations(show_id, residents, ()=>{});
@@ -455,8 +456,8 @@ module.exports = {
 
 		
 	},
-	edit_show : function(show_id, name, description, image_thumbnail, image_banner, date, frequency, featured, tracks, tags, residents, cb) {
-		edit_show(show_id, name, description, image_thumbnail, image_banner, frequency, featured, cb);
+	edit_show : function(show_id, name, description, image_thumbnail, image_banner, date, frequency, featured, stream, tracks, tags, residents, cb) {
+		edit_show(show_id, name, description, image_thumbnail, image_banner, frequency, featured, stream, cb);
 
 		update_tracklist(show_id, tracks, ()=>{});
 		update_tags(show_id, tags, ()=>{});

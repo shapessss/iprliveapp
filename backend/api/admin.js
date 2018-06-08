@@ -35,7 +35,6 @@ function checkNulls(req, keys) {
 
 
 function validateToken(req, res, next) {
-	
 	if (req.path == '/login' || req.path == '/images') return next();
 
 	if (!req.headers.authorization) return res.status(301).send('/admin/login')
@@ -45,7 +44,6 @@ function validateToken(req, res, next) {
 	try {
 		payload = jwt.verify(token, 'randomhash');
 	} catch (error) {
-		
 		return res.status(301).send('/admin/login')
 	}
 	
@@ -66,7 +64,7 @@ module.exports = {
 		/* --------------------- ---- ------------------------------ */
 		//name, description, image_thumbnail, image_banner, frequency, featured, cb
 		app.post('/add_show', (req, res)=>{
-			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'date', 'frequency', 'featured', 'tracks', 'tags', 'residents'];
+			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'date', 'frequency', 'featured', 'stream', 'tracks', 'tags', 'residents'];
 			let data = checkNulls(req, params)
 
 			if (data.length < params.length) {
@@ -84,7 +82,7 @@ module.exports = {
 
 		//show_id, name, description, image_thumbnail, image_banner, frequency, featured, cb
 		app.post('/edit_show', (req, res)=>{
-			let params = ['show_id','name', 'description', 'image_thumbnail', 'image_banner', 'date', 'frequency', 'featured', 'tracks', 'tags', 'residents'];
+			let params = ['show_id','name', 'description', 'image_thumbnail', 'image_banner', 'date', 'frequency', 'featured', 'stream', 'tracks', 'tags', 'residents'];
 			let data = checkNulls(req, params)
 
 			if (data.length < params.length) {
@@ -252,7 +250,6 @@ module.exports = {
 			let params = ['banner_id'];
 			let data = checkNulls(req, params)
 
-			console.log(req.body)
 
 			if (data.length < params.length) {
 				res.json({'missingdata':params[data.length]});
@@ -272,7 +269,6 @@ module.exports = {
 		app.post('/add_image', upload.single('image'), (req, res)=> {
 			let image_id = req.file.filename // new name
 			let imagename = req.file.originalname
-			console.log('addingimages')
 			admin_interface.add_image(image_id, imagename, (status)=>{
 				res.status(status).json({
 					image_id:image_id,

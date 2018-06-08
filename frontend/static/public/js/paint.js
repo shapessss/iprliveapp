@@ -83,7 +83,7 @@ function show_banner(forwards) {
 let bannerTimer;
 function add_banner(banners) {
 
-	if (banners.length == 1) return;
+	if (banners.length < 2) return;
 	
 
 	

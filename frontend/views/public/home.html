@@ -39,22 +39,18 @@
 	<div id = "latest" class = "featured_list">
 
 		<div class = "featured" ng-repeat = "show in latest">
-
 			<div class = "featured-image show">
 				<div class = "play fas fa-play-circle"></div>
 				<img src = "public/images/uploads/{{show.image_thumbnail}}">
+				<input type = "hidden" value ="{{show.stream}}">
 			</div>
-
 
 			<div class = "description">
 				<span class = "title"><a href = "/shows/{{show.show_id}}">{{show.name}}</a></span>
 				<span class = "genre">
-
-					<a href = "#" ng-repeat = "tag in show.tags">{{tag.tag}},</a>
-					
+					<a href = "#" ng-repeat = "tag in show.tags">{{tag.tag}},</a>	
 				</span>
 			</div>
-
 		</div>
 
 	</div>
@@ -71,6 +67,7 @@
 			<div class = "featured-image show">
 				<div class = "play fas fa-play-circle"></div>
 				<img src = "public/images/uploads/{{show.image_thumbnail}}">
+				<input type = "hidden" value ="{{show.stream}}">
 			</div>
 
 			<div class = "description">

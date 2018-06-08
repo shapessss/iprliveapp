@@ -276,11 +276,24 @@ app.controller("administration", function($scope, $http, $route) {
 	    
 	    fetch('/api/admin/add_image', {
 	        method:'POST',
-	        body:formdata
+	        body:formdata,
+			headers:{
+				"Authorization":"Bearer " + getToken()
+			}
 	    }).then(function(res) {
-	        return res.json();
+	    	if (res.status != 200) {
+	    		return res.text();
+	    	} else {
+	    		return res.json();
+	    	}
+	        
 	    }).then(function(res) {
-	    	
+	    	console.log(res);
+	    	if (res.image_id == undefined) {
+	    		window.location.href = res;
+	    	}
+
+
 	        $scope.images.push({
 	        	image_id:res.image_id,
 	        	imagename:res.imagename

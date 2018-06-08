@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS SHOWS (
 	date TEXT,
 	frequency TEXT,
 	featured INTEGER DEFAULT 0,
+	stream TEXT,
 
 
 	FOREIGN KEY (image_thumbnail) REFERENCES IMAGES(image_id),
@@ -149,7 +150,7 @@ db.run(show_table, (err) => {console.log(err)})
 db.run(track_table, (err) => {console.log(err)})
 db.run(tag_table, (err) => {console.log(err)})
 db.run(res_table, (err) => {console.log(err)})
-db.run(res_episode_table, (err) => {console.log(err)})
+db.run(res_shows_table, (err) => {console.log(err)})
 
 
 

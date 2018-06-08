@@ -6,7 +6,6 @@ const public_interface = require('../database/public_interface.js');
 module.exports = {
 	routing: function(app) {
 		app.get('/banners', (req, res)=>{
-			console.log('getting banners')
 			public_interface.get_banners((rows)=>{
 				res.json({"items":rows})
 			})
