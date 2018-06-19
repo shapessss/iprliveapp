@@ -31,11 +31,11 @@
 
 
 
-<div  ng-controller="shows">
+<div  ng-controller="main_shows">
 	<!-----------==== L A T E S T S H O W S ====------------>
 	<h2 class = "show_heading">Latest shows</h2>
 	<h3 class= "show_heading sub-title"> - a selection of our latest shows</h3>
-	<a href="#" class="button">all shows</a>
+	<a href="/shows" class="button">all shows</a>
 	<div id = "latest" class = "featured_list">
 
 		<div class = "featured" ng-repeat = "show in latest">
@@ -46,9 +46,9 @@
 			</div>
 
 			<div class = "description">
-				<span class = "title"><a href = "/shows/{{show.show_id}}">{{show.name}}</a></span>
+				<span class = "title"><a href = "/shows/{{show.show_id}}" ng-click="set_show(show);">{{show.name}}</a></span>
 				<span class = "genre">
-					<a href = "#" ng-repeat = "tag in show.tags">{{tag.tag}},</a>	
+					<a href = "/tags/{{tag.tag}}" ng-repeat = "tag in show.tags">{{tag.tag}},</a>	
 				</span>
 			</div>
 		</div>
@@ -58,8 +58,8 @@
 
 	<!-----------===- R E C O M M E N D E D ====------------>
 	<h2 class="show_heading">Recommended shows</h3>
-	<h3 class="show_heading sub-title"> - a selection of five standout shows from the week by our editors</h4>
-	<a href="recommended.html" class="button">recommended shows</a>
+	<h3 class="show_heading sub-title"> - a selection of standout shows</h4>
+	
 
 	<div id = "recommended" class = "featured_list">
 
@@ -71,10 +71,10 @@
 			</div>
 
 			<div class = "description">
-				<span class = "title"><a href = "/shows/{{show.show_id}}">{{show.name}}</a></span>
+				<span class = "title"><a href = "/shows/{{show.show_id}}" ng-click="set_show(show);>{{show.name}}</a></span>
 				<span class = "genre">
 
-					<a href = "#" ng-repeat = "tag in show.tags">{{tag.tag}},</a>
+					<a href = "/tags/{{tag.tag}}" ng-repeat = "tag in show.tags">{{tag.tag}},</a>
 					
 				</span>
 			</div>

@@ -221,8 +221,6 @@ app.controller("administration", function($scope, $http, $route) {
 					
 				}
 			}
-			console.log("items here")
-			console.log(data.data.items);
 			$scope.items = data.data.items;
 		}, 
 		(err)=> {

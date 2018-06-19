@@ -13,7 +13,29 @@ module.exports = {
 
 
 		app.get('/shows', (req, res)=>{
+			//get all shows
 			public_interface.get_all_shows((rows)=>{
+				res.json({"items":rows})
+			})
+		});
+
+		app.get('/featured_shows', (req, res)=>{
+			//get featured shows
+			public_interface.get_featured_shows((rows)=>{
+				res.json({"items":rows})
+			})
+		});
+
+		app.get('/latest_shows', (req, res)=>{
+			//get all shows
+			public_interface.get_latest_shows((rows)=>{
+				res.json({"items":rows})
+			})
+		});
+
+		app.get('/tagged_shows', (req, res)=>{
+			//get all shows
+			public_interface.get_tagged_shows(req.query.tag, (rows)=>{
 				res.json({"items":rows})
 			})
 		});
@@ -27,7 +49,13 @@ module.exports = {
 
 
 		app.get('/residents', (req, res)=>{
-			public_interface.get_residents((rows)=>{
+			public_interface.get_all_residents((rows)=>{
+				res.json({"items":rows})
+			})
+		});
+
+		app.get('/resident', (req, res)=>{
+			public_interface.get_individual_resident(req.query.resident_id, (rows)=>{
 				res.json({"items":rows})
 			})
 		});
@@ -40,29 +68,5 @@ module.exports = {
 			})
 		});
 
-
-		
-
-
-
-		app.get('/resident', (req, res)=>{
-			public_interface.get_resident_by_id(req.query.resident_id, (rows)=>{
-				res.json({"items":rows})
-			})
-		});
-
-
-
-
-		app.get('/ii', (req, res)=>{
-			console.log("ii")
-			public_interface.get_individual_show(1, (rows)=>{
-				console.log(rows);
-				res.json({"items":rows})
-			})
-		});
-
-
-		
 	}
 }

@@ -23,24 +23,65 @@ app.controller('banners', function($scope, $http) {
 });
 
 
-app.controller('shows', function($scope, $http) {
-	$http.get('api/public/shows')
+app.controller('main_shows', function($scope, $http, individual_clicked) {
+	//THIS IS FOR MAIN PAGE , basically limited to featured and latest
+	
+	
+	$http.get('api/public/featured_shows')
 		.then((data)=> {
-			let shows = data.data.items;
-
-			//if desktop
-			//make shows multiple of 3
-			
-			$scope.latest = sort_by_date(shows); //filter by date and get latest
-			$scope.featured = sort_by_featured(shows);
+			$scope.featured = data.data.items;
 		}, 
 		(err)=> {
 
 		});
+
+	$http.get('api/public/latest_shows')
+		.then((data)=> {
+			$scope.latest = data.data.items;
+		}, 
+		(err)=> {
+
+		});
+
+	
+	$scope.set_show = function(show) {
+		individual_clicked.set_show(show);
+	}
 });
 
 
-app.controller('residents', function($scope, $http) {
+app.controller('all_shows', function($scope, $http, $routeParams, individual_clicked) {
+	//THIS IS FOR SHOWS PAGE , basically limited to featured and latest
+	
+	//if tag then tag page, else /shows
+	if ($routeParams.tag) {
+		$http.get('api/public/tagged_shows?tag='+$routeParams.tag)
+			.then((data)=> {
+				console.log(data.data.items);
+				$scope.shows = data.data.items;
+			}, 
+			(err)=> {
+
+			});
+	} else {
+	
+		$http.get('api/public/shows')
+			.then((data)=> {
+				$scope.shows = data.data.items;
+			}, 
+			(err)=> {
+
+			});
+	}
+	
+	
+	$scope.set_show = function(show) {
+		individual_clicked.set_show(show);
+	}
+});
+
+
+app.controller('residents', function($scope, $http, individual_clicked) {
 	$http.get('api/public/residents')
 		.then((data)=> {
 			$scope.items = data.data.items;
@@ -48,6 +89,10 @@ app.controller('residents', function($scope, $http) {
 		(err)=> {
 
 		});
+
+	$scope.set_resident = function(resident) {
+		individual_clicked.set_resident(resident);
+	}
 });
 
 
@@ -63,14 +108,13 @@ app.controller('events', function($scope, $http) {
 
 
 app.controller('individual_show', function($scope, $http, $routeParams, individual_clicked) {
-	console.log("INDIVIDUAL SHOW CONTROLLER")
-	let show = individual_clicked.get_resident();
-	console.log(show);
+	let show = individual_clicked.get_show();
 	if (show == null) {
 		$http.get('api/public/show?show_id=' + $routeParams.show_id)
 			.then((data)=> {
-				console.log(data);
-				$scope.items = data.data.items;
+				if (data.data.items.length > 0) {
+					$scope.items = data.data.items[0];
+				}
 			}, 
 			(err)=> {
 
@@ -78,7 +122,7 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 	} else {
 		$scope.items = show;
 	}
-	console.log($scope.items);
+	
 	
 });
 
@@ -108,11 +152,11 @@ app.service("individual_clicked", function() {
 	let show = null;
 	let resident = null;
 
-	let new_show = function(s) {
+	let set_show = function(s) {
 		show = s;
 	}
 
-	let new_resident = function(r) {
+	let set_resident = function(r) {
 		resident = r;
 	}
 
@@ -121,8 +165,8 @@ app.service("individual_clicked", function() {
 	let get_resident = function() {return resident}
 
 	return {
-		new_show : new_show,
-		new_resident : new_resident,
+		set_show : set_show,
+		set_resident : set_resident,
 		get_show : get_show, 
 		get_resident : get_resident
 	}
