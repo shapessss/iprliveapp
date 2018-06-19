@@ -11,7 +11,9 @@ app.config(function($routeProvider, $locationProvider) {
     .when("/", {
         templateUrl : "home.html"
     })
-    ;
+    .when("/shows/:show_id", {
+        templateUrl : "individual-show.html"
+    });
 
 
     $locationProvider.html5Mode({

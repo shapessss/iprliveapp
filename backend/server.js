@@ -41,5 +41,13 @@ app.all("/admin*", function(req, res, next) {
 
 
 app.use(express.static(path.join(__dirname, '../frontend/views/public')));
+app.all("*", function(req, res, next) {
+	//exclude api routes
+	console.log(req.path);
+	if (!req.path.includes('/api/')) {
+		res.sendFile(path.join(__dirname, '../frontend/views/public/index.html'))
+	}
+	
+});
 
 app.listen(3000, () => console.log('Running on port 3000'))

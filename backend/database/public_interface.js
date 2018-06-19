@@ -63,6 +63,7 @@ function get_events(cb) {
 //get tracks of each show
 //get residents of each show
 function get_shows(cb) {
+	
 	getdatabase((db) => {
 		db.all("SELECT * FROM SHOWS", (err, rows) => {
 			if (err) console.log(err);	
@@ -196,7 +197,7 @@ function get_residents(cb) {
 			let show_sql = 'SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE resident_id = ?'
 
 			db.all(show_sql, [r.resident_id], (err, rows)=> {
-				if (rows == undefined || rows.length == 0) {
+				if (rows.length == 0) {
 					r.shows = [];
 					done();
 					return;
@@ -237,7 +238,7 @@ function get_residents(cb) {
 //tags tracks residents
 function get_show_by_id(show_id, cb) {
 	getdatabase((db)=> {
-		
+		console.log("getting show by id");
 		let show = null;
 		let residents = [];
 		let sql = 'SELECT * FROM SHOWS WHERE show_id = ?';
@@ -247,24 +248,28 @@ function get_show_by_id(show_id, cb) {
 
 		db.get(sql, [show_id], (err, row)=> {
 			show = row;
-			
+			console.log(show);
 			//if undefined
 			if (show == undefined) {
-				cb([])
+				cb([]);
+				return;
 			}
 
 			if (residentsDone) {
 				show.residents = residents;
 				console.log(show);
 				cb(show);
+				return;
 			}
 
 		})
 
-		db.all('SELECT * FROM EPISODE_RESIDENT WHERE show_id = ?', [show_id], (err, rows)=> {
+		db.all('SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE show_id = ?', [show_id], (err, rows)=> {
 			let index = 0;
+			
+			if (rows.length == 0) residentsDone = true;
+			if (show != null) return cb(show);
 			let max = rows.length;
-			if (rows.length == 0 ) cb([])
 			for (var r of rows) {
 				get_resident(r, (row)=> {
 					residents.push(row);
@@ -313,10 +318,11 @@ function get_resident_by_id(resident_id, cb) {
 
 		})
 
-		db.all('SELECT * FROM EPISODE_RESIDENT WHERE resident_id = ?', [resident_id], (err, rows)=> {
+		db.all('SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE resident_id = ?', [resident_id], (err, rows)=> {
 			let index = 0;
-			let max = rows.length;
 			if (rows.length == 0) cb([])
+			let max = rows.length;
+			
 			for (var r of rows) {
 				get_show(r, (row)=> {
 					shows.push(row);
@@ -345,11 +351,57 @@ function get_resident_by_id(resident_id, cb) {
 
 
 
+
+//new functions
+function get_latest_shows(cb) {
+	getdatabase((db)=> {
+		db.get("SELECT * FROM SHOWS ORDER BY date(date) DESC LIMIT 9", [], (err, rows)=> {
+			get_shows(cb, rows);
+		})
+	});
+}
+
+function get_featured_shows(cb) {
+	getdatabase((db)=> {
+		db.get("SELECT * FROM SHOWS WHERE featured = 1 LIMIT 9", [], (err, rows)=> {
+			get_shows(cb, rows);
+		})
+	});
+}
+
+function get_tagged_shows(tag, cb) {
+
+}
+
+function get_individual_show(show_id, cb) {
+	getdatabase((db)=> {
+		db.get("SELECT * FROM SHOWS WHERE show_id = ?", [show_id], (err, rows)=> {
+			get_shows(rows, cb);
+		})
+	});
+}
+
+//get shows
+function get_shows(show_list, cb) {
+	//get any shows in list
+	//list is dictated by latest/tags/featured/individual etc
+	cb(show_list);
+}
+
+
+
+
+
+
 module.exports = {
 	get_banners : function(cb) {get_banners(cb)},
 	get_events : function(cb) {get_events(cb)},
 	get_shows : function(cb) {get_shows(cb)},
 	get_residents : function(cb) {get_residents(cb)},
 	get_show_by_id : function(show_id, cb) {get_show_by_id(show_id, cb)},
-	get_resident_by_id : function(resident_id, cb) {get_resident_by_id(resident_id, cb)}
+	get_resident_by_id : function(resident_id, cb) {get_resident_by_id(resident_id, cb)},
+
+
+	//new shows
+	get_individual_show: function(show_id, cb) {get_individual_show(show_id, cb)}
 }

@@ -63,11 +63,13 @@ app.controller('events', function($scope, $http) {
 
 
 app.controller('individual_show', function($scope, $http, $routeParams, individual_clicked) {
-
+	console.log("INDIVIDUAL SHOW CONTROLLER")
 	let show = individual_clicked.get_resident();
+	console.log(show);
 	if (show == null) {
 		$http.get('api/public/show?show_id=' + $routeParams.show_id)
 			.then((data)=> {
+				console.log(data);
 				$scope.items = data.data.items;
 			}, 
 			(err)=> {
@@ -76,7 +78,7 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 	} else {
 		$scope.items = show;
 	}
-
+	console.log($scope.items);
 	
 });
 

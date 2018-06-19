@@ -37,6 +37,7 @@ module.exports = {
 
 		app.get('/show', (req, res)=>{
 			public_interface.get_show_by_id(req.query.show_id, (rows)=>{
+				console.log(rows);
 				res.json({"items":rows})
 			})
 		});
@@ -45,6 +46,17 @@ module.exports = {
 
 		app.get('/resident', (req, res)=>{
 			public_interface.get_resident_by_id(req.query.resident_id, (rows)=>{
+				res.json({"items":rows})
+			})
+		});
+
+
+
+
+		app.get('/ii', (req, res)=>{
+			console.log("ii")
+			public_interface.get_individual_show(1, (rows)=>{
+				console.log(rows);
 				res.json({"items":rows})
 			})
 		});
