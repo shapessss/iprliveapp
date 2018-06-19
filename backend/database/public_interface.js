@@ -34,136 +34,8 @@ function closedatabase(db) {
 
 
 
-//get banners from database
-function get_banners(cb) {
-	getdatabase((db) => {
-		db.all("SELECT * FROM BANNERS", (err, rows) => {
-			if (err) console.log(err);				
-			cb(rows);
-			closedatabase(db);
-		});
-	})
-}
 
 
-//get events from database
-function get_events(cb) {
-	getdatabase((db) => {
-		db.all("SELECT * FROM EVENTS", (err, rows) => {
-			if (err) console.log(err);				
-			cb(rows);
-			closedatabase(db);
-		});
-	})
-}
-
-
-//get shows from database
-//get tags of each show
-//get tracks of each show
-//get residents of each show
-function get_shows(cb) {
-	
-	getdatabase((db) => {
-		db.all("SELECT * FROM SHOWS", (err, rows) => {
-			if (err) console.log(err);	
-			//for each episode get tags and tracks
-			let tags_sql = 'SELECT * FROM TAGS WHERE show_id = ?';
-			let tracks_sql = 'SELECT * FROM TRACKS WHERE show_id = ?';
-
-			let num_rows = rows.length;
-			let index = 0;
-
-			if (num_rows == 0) {
-				cb(rows);
-				closedatabase(db);
-			}
-
-			for (var r of rows) {
-				
-				get_related(r, tags_sql, 'tags', ()=>{
-					console.log('get tags')
-					if (index >= num_rows * 3) {
-						cb(rows);
-						closedatabase(db);
-					}
-				})
-
-				get_related(r, tracks_sql, 'tracks', ()=>{
-					console.log('get tracks')
-					if (index >= num_rows * 3) {
-						cb(rows);
-						closedatabase(db);
-					}
-				})
-
-
-				// get related resident ids
-				get_residents_2(r, ()=> {
-					console.log('get residents')
-					if (index >= num_rows * 3) {
-						cb(rows);
-						closedatabase(db);
-					}
-				})
-
-
-				
-			}
-
-
-			function get_related(r, n_sql, related, done) {
-				
-				db.all(n_sql, [r.show_id], (err, n_rows)=>{
-
-					r[related] = n_rows;
-					index += 1;
-					done();					
-				})
-			}
-
-
-
-			function get_residents_2(r, done) {
-				
-				db.all("SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE show_id = ?", [r.show_id], (err, rows)=> {
-					if (rows == undefined || rows.length == 0) {
-						r.residents = [];
-						index += 1;
-						done();
-						return;
-					}
-					get_list_of_residents(rows, (residents)=>{
-						r.residents = residents;
-						index += 1;
-						done();
-					});
-				})
-			}
-
-
-			function get_list_of_residents(residents, cb) {
-				let index = 0;
-				let max = residents.length;
-				let data = [];
-
-				for (var r of residents) {
-					db.get('SELECT * FROM RESIDENTS WHERE resident_id = ?', [r.resident_id], (err, row)=> {
-						data.push(row);
-
-						if (data.length == max) {
-							cb(data);
-						}
-					})
-				}
-			}
-	
-			
-		});
-		
-		
-	})
-}
 
 
 //get residents
@@ -232,70 +104,6 @@ function get_residents(cb) {
 
 
 
-
-
-//get individual show
-//tags tracks residents
-function get_show_by_id(show_id, cb) {
-	getdatabase((db)=> {
-		console.log("getting show by id");
-		let show = null;
-		let residents = [];
-		let sql = 'SELECT * FROM SHOWS WHERE show_id = ?';
-
-		let residentsDone = false;
-		
-
-		db.get(sql, [show_id], (err, row)=> {
-			show = row;
-			console.log(show);
-			//if undefined
-			if (show == undefined) {
-				cb([]);
-				return;
-			}
-
-			if (residentsDone) {
-				show.residents = residents;
-				console.log(show);
-				cb(show);
-				return;
-			}
-
-		})
-
-		db.all('SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE show_id = ?', [show_id], (err, rows)=> {
-			let index = 0;
-			
-			if (rows.length == 0) residentsDone = true;
-			if (show != null) return cb(show);
-			let max = rows.length;
-			for (var r of rows) {
-				get_resident(r, (row)=> {
-					residents.push(row);
-					index += 1;
-
-					if (index >= max) {
-						residentsDone = true;
-						if (show != null) {
-							//both done
-							show.residents = residents;
-							console.log(show);
-							cb(show);
-						}
-					}
-				})
-			}
-		})
-
-		function get_resident(r, done) {
-			db.get("SELECT * FROM RESIDENTS WHERE resident_id = ?", [r.resident_id], (err, row)=> {
-				done(row);
-			})
-		}
-	})
-}
-
 //get individual resident
 //shows
 function get_resident_by_id(resident_id, cb) {
@@ -353,39 +161,162 @@ function get_resident_by_id(resident_id, cb) {
 
 
 //new functions
+
+//get banners from database
+function get_banners(cb) {
+	getdatabase((db) => {
+		db.all("SELECT * FROM BANNERS", (err, rows) => {
+			if (err) console.log(err);				
+			cb(rows);
+			closedatabase(db);
+		});
+	})
+}
+
+
+//get events from database
+function get_events(cb) {
+	getdatabase((db) => {
+		db.all("SELECT * FROM EVENTS", (err, rows) => {
+			if (err) console.log(err);				
+			cb(rows);
+			closedatabase(db);
+		});
+	})
+}
+
+
 function get_latest_shows(cb) {
 	getdatabase((db)=> {
-		db.get("SELECT * FROM SHOWS ORDER BY date(date) DESC LIMIT 9", [], (err, rows)=> {
-			get_shows(cb, rows);
+		db.all("SELECT * FROM SHOWS ORDER BY date(date) DESC LIMIT 9", [], (err, rows)=> {
+			get_shows(rows, db, cb);
 		})
 	});
 }
 
 function get_featured_shows(cb) {
 	getdatabase((db)=> {
-		db.get("SELECT * FROM SHOWS WHERE featured = 1 LIMIT 9", [], (err, rows)=> {
-			get_shows(cb, rows);
+		db.all("SELECT * FROM SHOWS WHERE featured = 1 LIMIT 9", [], (err, rows)=> {
+			get_shows(rows, db, cb);
 		})
 	});
 }
 
 function get_tagged_shows(tag, cb) {
-
-}
-
-function get_individual_show(show_id, cb) {
 	getdatabase((db)=> {
-		db.get("SELECT * FROM SHOWS WHERE show_id = ?", [show_id], (err, rows)=> {
-			get_shows(rows, cb);
+		db.all("SELECT * FROM TAGS WHERE tag = ?", [tag], (err, rows)=> {
+			get_shows(rows, db, cb);
 		})
 	});
 }
 
+function get_individual_show(show_id, cb) {
+	getdatabase((db)=> {
+		db.all("SELECT * FROM SHOWS WHERE show_id = ?", [show_id], (err, rows)=> {
+			get_shows(rows, db, cb);
+		})
+	});
+}
+
+function get_all_shows(cb) {
+	getdatabase((db)=> {
+		db.all("SELECT * FROM SHOWS", (err, rows)=> {
+			get_shows(rows, db, cb);
+		})
+	});
+}
+
+
+
+
+function get_tags_by_show(show_id, db, cb) {
+	db.all("SELECT * FROM TAGS WHERE show_id = ?", [show_id], (err, rows)=> {
+		if (rows == undefined) return cb([]);
+		//rows only returns dict if length 1
+
+		cb(rows);
+	});
+}
+
+function get_residents_by_show(show_id, db, cb) {
+
+
+	db.all("SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE show_id = ?", [show_id], (err, rows)=> {
+		//for each resident get more info
+		let current = 0;
+		let total = rows.length;
+		if (current == total) return cb([]);
+		let residents = [];
+		for (let resident_id of rows) {
+			db.get("SELECT * FROM RESIDENTS WHERE resident_id = ?", [resident_id], (err, rows) => {
+				if (!err) {
+					residents.push(rows);
+				}
+				current += 1;
+				if (current >= total) {
+					cb(residents);
+				}
+			
+			})
+		}
+	});
+}
+
+function get_tracks_by_show(show_id, db, cb) {
+	db.all("SELECT * FROM TRACKS WHERE show_id = ?", [show_id], (err, rows) => {
+		
+		cb(rows);
+	});
+}
+
+
 //get shows
-function get_shows(show_list, cb) {
+function get_shows(show_list, db, cb) {
 	//get any shows in list
 	//list is dictated by latest/tags/featured/individual etc
-	cb(show_list);
+	//for each show
+	//get tags
+	//get residents
+	//get tracks
+	let current_complete = 0;
+	let total = show_list != undefined ? show_list.length : 0;
+	for (let show of show_list) {
+		//get tags
+		get_tags_by_show(show.show_id, db, (res)=> {
+			show.tags = res;
+			console.log('tags')
+			if (show.residents != null && show.tracks != null) {
+				current_complete += 1;
+				if (current_complete >= total) {
+					cb(show_list);
+				}
+			}
+		});
+		get_residents_by_show(show.show_id, db, (res)=> {
+			show.residents = res;
+			console.log('res')
+			if (show.tags != null && show.tracks != null) {
+				current_complete += 1;
+				if (current_complete >= total) {
+					cb(show_list);
+				}
+			}
+		});
+		get_tracks_by_show(show.show_id, db, (res)=> {
+			show.tracks = res;
+			console.log('trac')
+			if (show.tags != null && show.residents != null) {
+				current_complete += 1;
+				if (current_complete >= total) {
+					cb(show_list);
+				}
+			}
+		});
+		
+	}
+
+
+	//cb(show_list);
 }
 
 
@@ -396,12 +327,15 @@ function get_shows(show_list, cb) {
 module.exports = {
 	get_banners : function(cb) {get_banners(cb)},
 	get_events : function(cb) {get_events(cb)},
-	get_shows : function(cb) {get_shows(cb)},
+	
 	get_residents : function(cb) {get_residents(cb)},
-	get_show_by_id : function(show_id, cb) {get_show_by_id(show_id, cb)},
 	get_resident_by_id : function(resident_id, cb) {get_resident_by_id(resident_id, cb)},
 
 
 	//new shows
-	get_individual_show: function(show_id, cb) {get_individual_show(show_id, cb)}
+	get_latest_shows: function(cb) {get_latest_shows(cb)},
+	get_featured_shows: function(cb) {get_featured_shows(cb)},
+	get_tagged_shows: function(tag, cb) {get_tagged_shows(tag, cb)},
+	get_individual_show: function(show_id, cb) {get_individual_show(show_id, cb)},
+	get_all_shows: function(cb) {get_all_shows(cb)}
 }

@@ -13,7 +13,13 @@ module.exports = {
 
 
 		app.get('/shows', (req, res)=>{
-			public_interface.get_shows((rows)=>{
+			public_interface.get_all_shows((rows)=>{
+				res.json({"items":rows})
+			})
+		});
+
+		app.get('/show', (req, res)=>{
+			public_interface.get_individual_show(req.query.show_id, (rows)=>{
 				res.json({"items":rows})
 			})
 		});
@@ -35,12 +41,7 @@ module.exports = {
 		});
 
 
-		app.get('/show', (req, res)=>{
-			public_interface.get_show_by_id(req.query.show_id, (rows)=>{
-				console.log(rows);
-				res.json({"items":rows})
-			})
-		});
+		
 
 
 
