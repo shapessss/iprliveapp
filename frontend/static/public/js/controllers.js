@@ -81,34 +81,9 @@ app.controller('all_shows', function($scope, $http, $routeParams, individual_cli
 });
 
 
-app.controller('residents', function($scope, $http, individual_clicked) {
-	$http.get('api/public/residents')
-		.then((data)=> {
-			$scope.items = data.data.items;
-		}, 
-		(err)=> {
-
-		});
-
-	$scope.set_resident = function(resident) {
-		individual_clicked.set_resident(resident);
-	}
-});
-
-
-app.controller('events', function($scope, $http) {
-	$http.get('api/public/events')
-		.then((data)=> {
-			$scope.items = data.data.items;
-		}, 
-		(err)=> {
-
-		});
-});
-
-
 app.controller('individual_show', function($scope, $http, $routeParams, individual_clicked) {
 	let show = individual_clicked.get_show();
+	console.log(show);
 	if (show == null) {
 		$http.get('api/public/show?show_id=' + $routeParams.show_id)
 			.then((data)=> {
@@ -127,25 +102,50 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 });
 
 
-app.controller('individual_resident', function($scope, $http, $routeParams, individual_clicked) {
+app.controller('all_residents', function($scope, $http, individual_clicked) {
+	$http.get('api/public/residents')
+		.then((data)=> {
+			$scope.items = data.data.items;
+		}, 
+		(err)=> {
 
+		});
+
+	$scope.set_resident = function(resident) {
+		individual_clicked.set_resident(resident);
+	}
+});
+
+
+
+
+app.controller('individual_resident', function($scope, $http, $routeParams, individual_clicked) {
 	let resident = individual_clicked.get_resident();
 	if (resident == null) {
-		$http.get('api/public/show?resident_id=' + $routeParams.resident_id)
+		$http.get('api/public/resident?resident_id=' + $routeParams.resident_id)
 			.then((data)=> {
-				$scope.items = data.data.items;
+				if (data.data.items.length > 0) {
+					$scope.resident = data.data.items[0];
+				}
 			}, 
 			(err)=> {
 
 			});
 	} else {
-		$scope.items = resident;
-	}
-
-	
+		$scope.resident = resident;
+	}	
+	document.getElementById("banner").setAttribute("style", "height:" + window.innerHeight * 0.8 + "px;")
 });
 
+app.controller('events', function($scope, $http) {
+	$http.get('api/public/events')
+		.then((data)=> {
+			$scope.items = data.data.items;
+		}, 
+		(err)=> {
 
+		});
+});
 
 
 app.service("individual_clicked", function() {

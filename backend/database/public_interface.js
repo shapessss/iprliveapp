@@ -64,7 +64,10 @@ function get_events(cb) {
 function get_latest_shows(cb) {
 	getdatabase((db)=> {
 		db.all("SELECT * FROM SHOWS ORDER BY date(date) DESC LIMIT 9", [], (err, rows)=> {
-			get_shows(rows, db, cb);
+			get_shows(rows, db, (res)=> {
+				cb(res);
+				closedatabase(db);
+			});
 		})
 	});
 }
@@ -72,7 +75,10 @@ function get_latest_shows(cb) {
 function get_featured_shows(cb) {
 	getdatabase((db)=> {
 		db.all("SELECT * FROM SHOWS WHERE featured = 1 LIMIT 9", [], (err, rows)=> {
-			get_shows(rows, db, cb);
+			get_shows(rows, db, (res)=> {
+				cb(res);
+				closedatabase(db);
+			});
 		})
 	});
 }
@@ -84,14 +90,20 @@ function get_tagged_shows(tag, cb) {
 			let current = 0;
 			let maximum = rows.length;
 			if (maximum == current) {
-				get_shows([], db, cb);
+				get_shows([], db, (res)=> {
+					cb(res);
+					closedatabase(db);
+				});
 			}
 			for (let row of rows) {
 				db.get("SELECT * FROM SHOWS WHERE show_id = ?", [row.show_id], (err, result) => {
 					shows.push(result);
 					current += 1;
 					if (maximum == current) {
-						get_shows(shows, db, cb);
+						get_shows(shows, db, (res)=> {
+							cb(res);
+							closedatabase(db);
+						});
 					}
 				})
 			}
@@ -103,7 +115,10 @@ function get_tagged_shows(tag, cb) {
 function get_individual_show(show_id, cb) {
 	getdatabase((db)=> {
 		db.all("SELECT * FROM SHOWS WHERE show_id = ?", [show_id], (err, rows)=> {
-			get_shows(rows, db, cb);
+			get_shows(rows, db, (res)=> {
+				cb(res);
+				closedatabase(db);
+			});
 		})
 	});
 }
@@ -111,7 +126,10 @@ function get_individual_show(show_id, cb) {
 function get_all_shows(cb) {
 	getdatabase((db)=> {
 		db.all("SELECT * FROM SHOWS", (err, rows)=> {
-			get_shows(rows, db, cb);
+			get_shows(rows, db, (res)=> {
+				cb(res);
+				closedatabase(db);
+			});
 		})
 	});
 }
@@ -137,8 +155,8 @@ function get_residents_by_show(show_id, db, cb) {
 		let total = rows.length;
 		if (current == total) return cb([]);
 		let residents = [];
-		for (let resident_id of rows) {
-			db.get("SELECT * FROM RESIDENTS WHERE resident_id = ?", [resident_id], (err, rows) => {
+		for (let r of rows) {
+			db.get("SELECT * FROM RESIDENTS WHERE resident_id = ?", [r.resident_id], (err, rows) => {
 				if (!err) {
 					residents.push(rows);
 				}
@@ -179,7 +197,7 @@ function get_shows(show_list, db, cb) {
 				current_complete += 1;
 				if (current_complete >= total) {
 					cb(show_list);
-					closedatabase(db);
+					
 				}
 			}
 		});
@@ -189,7 +207,7 @@ function get_shows(show_list, db, cb) {
 				current_complete += 1;
 				if (current_complete >= total) {
 					cb(show_list);
-					closedatabase(db);
+					
 				}
 			}
 		});
@@ -199,7 +217,7 @@ function get_shows(show_list, db, cb) {
 				current_complete += 1;
 				if (current_complete >= total) {
 					cb(show_list);
-					closedatabase(db);
+					
 				}
 			}
 		});
@@ -258,7 +276,9 @@ function get_show_by_residents(resident_id, db, cb) {
 				shows.push(row);
 				current += 1;
 				if (current == maximum) {
-					return cb(shows);
+					get_shows(shows, db, (res)=> {
+						cb(res);
+					});
 				}
 			})
 		}

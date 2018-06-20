@@ -1,15 +1,22 @@
-<h2 class = "show_heading">Residents</h2>
-<h3 class= "show_heading sub-title"> - browse through our list of over 100 international residents</h4>
-<div class = "featured_list">
 
-  <div class = "featured">
+<div ng-controller="all_residents">
+	<h1 class = "show_heading">Residents</h1>
+	<h3 class= "show_heading sub-title"> - browse through our list of over 100 international residents</h3>
+	<div class = "featured_list">
 
-  			<div class = "featured-image tile-active">
-  				<a href="#" target="blank">
-  				<img src = "images/residents-tiles/313-tile.jpg"></a>
-  			</div>
-  			<a class = "description" href = "#">
-  				<span class = "title">313 w/ Juan Ramirez</span>
-  				<span class = "genre">fortnightly</span>
-  			</a>
-  		</div>
+		<div class = "featured" ng-repeat = "resident in items">
+			<div class = "featured-image">
+				<a href="/residents/{{resident.resident_id}}" ng-click="set_resident(resident);">
+					<img src = "public/images/uploads/{{resident.image_thumbnail}}" class= "tile-active">
+				</a>
+			</div>
+			<div class = "description">
+				<span class = "title"><a href = "/residents/{{resident.resident_id}}" ng-click="set_resident(resident);">{{resident.name}}</a></span>
+				<span class = "genre">
+					{{resident.description}}	
+				</span>
+			</div>
+		</div>
+
+	</div>
+</div>

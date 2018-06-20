@@ -22,7 +22,7 @@ app.config(function($routeProvider, $locationProvider) {
     .when("/residents", {
         templateUrl : "residents.html"
     })
-    .when("/residents/:residents", {
+    .when("/residents/:resident_id", {
         templateUrl : "individual-resident.html"
     })
 

@@ -536,7 +536,7 @@ span.genre {
 .featured-image:hover img {
 	/*filter:brightness(0.7);*/
 }
-
+.tile-active {border:solid 2.5px transparent;}
 .tile-active:hover {
 	border: solid 2.5px #fff;
 }
