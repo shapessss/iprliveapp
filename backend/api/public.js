@@ -1,6 +1,6 @@
 //same as db for now, do logic and filtering on client side
 
-const public_interface = require('../database/public_interface.js');
+const public_interface = require('./backend/database/public_interface.js');
 
 
 module.exports = {
