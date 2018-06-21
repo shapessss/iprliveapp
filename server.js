@@ -62,6 +62,7 @@ pool.query('SELECT NOW()', (err, res) => {
   console.log(err, res)
   pool.end()
 })
+console.log("PG WORKING")
 
 
 
