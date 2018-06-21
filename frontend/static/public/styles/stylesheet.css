@@ -7,6 +7,11 @@
 }
 
 
+html, body {height:100%;}
+.ng-scope {min-height: 100%;}
+
+
+
 body {
 	margin: 0;
 	padding: 0;
@@ -99,11 +104,9 @@ h4 {
 .media-styling {
 	margin-top: 18.5;
 	font-family: inherit !important;
-	font-weight: inherit !important; 
+	font-weight: inherit !important;
 	margin-left: 10;
-	font-size: .9em; 
-
-
+	font-size: .9em;
 }
 
 
@@ -240,8 +243,8 @@ h4 {
 	background-color: black;
 	box-sizing: border-box;
 	display: inline-block;
-  clear: both;
-  float: right;
+  	clear: both;
+  	float: right;
 }
 
 .title {
@@ -346,11 +349,16 @@ h4 {
 
 
 
+/* -----------===- L A T E S T - W R A P P E R ====------------ */
+
+
 /* -----------===- R E C O M M E N D E D ====------------ */
+
 .recommended-container {
 	margin-top: 3vw;
 	margin-bottom: 3vw;
 }
+
 
 .recommended_list {
 	position: relative;
@@ -399,8 +407,8 @@ h4 {
 
 /* -----------===- L A T E S T S H O W S ====------------ */
 .wrapper {
-	margin-top: 1vw;
-	margin-right: -7vw; 
+	margin-top: -1.5vw;
+	margin-right: -7vw;
 }
 
 #stage {
@@ -412,8 +420,12 @@ h4 {
 
 .show_heading {
 	display: inline-block;
-	padding-left: 40px;
 	margin-top: 45px;
+}
+
+.intro_text_wrapper {
+	position: relative; 
+	left: 5%; 
 }
 
 
@@ -429,12 +441,13 @@ h4 {
 .featured_list {
 	position: relative;
     top: 0;
-    left: 25px;
-    width: calc(100% - 50px);
+        width: 100%;
     margin-bottom: 10px;
+    padding: 0 25px 0 25px;
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
+    box-sizing: border-box;
 }
 
 
@@ -536,6 +549,7 @@ span.genre {
 .featured-image:hover img {
 	/*filter:brightness(0.7);*/
 }
+
 .tile-active {border:solid 2.5px transparent;}
 .tile-active:hover {
 	border: solid 2.5px #fff;
@@ -567,13 +581,14 @@ span.genre {
   bottom: 0;
   width: 100%;
   display:none;
+  font-size: 14px;
 }
 
 #hide_mixcloud {
   position:absolute;
   top:-50px;
   right:10px;
-  width:100px;
+  width:50px;
   height:50px;
   background:black;
   color:white;
@@ -608,12 +623,12 @@ span.genre {
 	display: flex;
 	 -webkit-box-pack: justify;
 	padding: 1.2rem 20px;
-	padding-left: 70px;
 }
 
 .footer__inner .credit {
 	-webkit-box-flex: 1;
 	flex: 1;
+	margin-left: -15;
 }
 
 .footer p {
@@ -635,10 +650,16 @@ span.genre {
 
 
 
+/* ----------------- G*U*E*S*T*S S*H*O*W ---------------------- */
+#guests-wrapper {
+	margin-top: -1.5vw;
+	margin-left: -2vw !important;
+	margin-right: -2vw !important;
+}
 
-
-
-
+.guests_heading_wrapper {
+	margin-left: 5.5vw; 
+}
 
 
 
@@ -702,6 +723,13 @@ span.genre {
 
 
 /* -----------=== R E S I D E N T - I N D I V I D U A L - P A G E ====------------ */
+#residents-wrapper {
+	margin-top: -1.5vw;
+	margin-left: -2vw !important;
+	margin-right: -2vw !important;
+}
+
+
 .resident-description {
 	position: absolute;
 	min-width: 400px;
@@ -720,8 +748,8 @@ span.genre {
 .resident-description h1 {
 	margin: 0.5em 0 0.5em 0;
 	font-size: 1.5em;
-  	line-height: 1.5em;
-  	font-weight: 600;
+  line-height: 1.5em;
+  font-weight: 600;
 
 }
 
@@ -742,7 +770,7 @@ span.genre {
 /* -----------=== R E S I D E N T - I N D I V I D U A L - E P I S O D E ====------------ */
 .fixed-item {
 	position: fixed !important;
-
+	top:0;
 }
 
 
@@ -899,8 +927,7 @@ span.genre {
 
 /* -----------=== S C H E D U L E * P A G E ====------------ */
 .schedule-heading {
-	margin-top: 3vw;
-  	margin-left: 3vw;
+  margin-left: 3vw;
 	border-bottom: 2px solid #fff;
 }
 
