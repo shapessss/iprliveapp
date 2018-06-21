@@ -1,9 +1,9 @@
-const admin_interface = require('./backend/database/admin_interface.js');
+const admin_interface = require('../database/admin_interface.js');
 
 const multer  = require('multer')
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'frontend/static/public/images/uploads')
+    cb(null, '../../frontend/static/public/images/uploads')
   },
   filename: function (req, file, cb) {
   	let name = Math.floor(Math.random() * 100) + '-' + Date.now()
