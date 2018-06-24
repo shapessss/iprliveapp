@@ -38,20 +38,11 @@
 
 
 
-<label>Show date</label>
-<input type = "date" ng-model="add_item['date']">
 
-<label>Show frequency</label>
-
-<select ng-model="add_item['frequency']">
-	<option ng-selected="add_item['frequency'] == 'daily'">Daily</option>
-	<option ng-selected="add_item['frequency'] == 'weekly'">Weekly</option>
-	<option ng-selected="add_item['frequency'] == 'monthly'">Monthly</option>
-</select>
 
 
 <label>Show featured</label>
-<input type = "checkbox" ng-model="add_item['featured']" ng-checked="add_item['featured']">
+<input type = "checkbox" ng-model="add_item['featured']" ng-checked="add_item['featured']" ng-init="add_item['featured'] = false">
 
 <label>Show stream url</label>
 <input type = "text" ng-model="add_item['stream']">

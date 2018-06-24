@@ -1,5 +1,5 @@
 const { Pool, Client } = require('pg')
-//var connectionString = 'postgres://postgres:PASSWORD@localhost:5432/radio'
+//var connectionString = 'postgres://postgres:password@localhost:5432/radio'
 var connectionString = "postgres://xqfejbmovmcger:43150b88f6939c50ed733a25187d127d1a1b74a04b6531ac41b66158c7ad5f43@ec2-174-129-192-200.compute-1.amazonaws.com:5432/d36rhr4o68ln8e"
 const pool = new Pool({
   connectionString: connectionString,
@@ -75,7 +75,7 @@ function get_schedules(cb) {
 
 
 function get_latest_shows(cb) {
-	pool.query("SELECT * FROM SHOWS ORDER BY date DESC LIMIT 9", (err, rows) => {
+	pool.query("SELECT * FROM SHOWS ORDER BY show_id DESC LIMIT 9", (err, rows) => {
 		if (err) return cb([]);
 
 		get_shows(rows.rows, cb);
@@ -84,7 +84,7 @@ function get_latest_shows(cb) {
 
 
 function get_featured_shows(cb) {
-	pool.query("SELECT * FROM SHOWS WHERE FEATURED = TRUE ORDER BY DATE DESC", (err, rows) => {
+	pool.query("SELECT * FROM SHOWS WHERE FEATURED = TRUE ORDER BY show_id DESC LIMIT 9", (err, rows) => {
 		if (err) return cb([]);
 
 		get_shows(rows.rows, cb);
@@ -102,7 +102,7 @@ function get_individual_show(show_id, cb) {
 
 
 function get_all_shows(cb) {
-	pool.query("SELECT * FROM SHOWS ORDER BY date DESC", (err, rows) => {
+	pool.query("SELECT * FROM SHOWS", (err, rows) => {
 		if (err) return cb([]);
 		get_shows(rows.rows, cb);
 	})
@@ -206,6 +206,20 @@ function get_residents_by_show(show_id, cb) {
 }
 
 
+//get next available date of show playing in future
+function get_next_playing(show_id, cb) {
+	pool.query("SELECT date, time FROM SCHEDULE WHERE show_id = $1 ORDER BY date ASC", [show_id], (err, res)=> {
+		let currentDate = new Date();
+		
+		if (res.rows.length == 0) return cb({date:-1})
+		for (let r of res.rows) {
+			if (r['date'] > currentDate) {
+				return cb(r);
+			}
+		}
+	})
+}
+
 
 //get shows
 function get_shows(show_list, cb) {
@@ -226,7 +240,7 @@ function get_shows(show_list, cb) {
 		//get tags
 		get_tags_by_show(show.show_id, (res)=> {
 			show.tags = res;
-			if (show.residents != null && show.tracks != null) {
+			if (show.residents != null && show.tracks != null && show.date != null) {
 				current_complete += 1;
 				if (current_complete >= total) {
 					cb(show_list);
@@ -238,7 +252,7 @@ function get_shows(show_list, cb) {
 		
 		get_residents_by_show(show.show_id, (res)=> {
 			show.residents = res;
-			if (show.tags != null && show.tracks != null) {
+			if (show.tags != null && show.tracks != null && show.date != null) {
 				current_complete += 1;
 				if (current_complete >= total) {
 					cb(show_list);
@@ -250,7 +264,7 @@ function get_shows(show_list, cb) {
 		
 		get_tracks_by_show(show.show_id, (res)=> {
 			show.tracks = res;
-			if (show.tags != null && show.residents != null) {
+			if (show.tags != null && show.residents != null && show.date != null) {
 				current_complete += 1;
 				if (current_complete >= total) {
 					cb(show_list);
@@ -258,6 +272,20 @@ function get_shows(show_list, cb) {
 				}
 			}
 		});
+
+
+		get_next_playing(show.show_id, (res)=> {
+			console.log(res);
+			console.log('!')
+			show.date = res;
+			if (show.tags != null && show.residents != null && show.tracks != null) {
+				current_complete += 1;
+				if (current_complete >= total) {
+					cb(show_list);
+					
+				}
+			}
+		})
 		
 	}
 

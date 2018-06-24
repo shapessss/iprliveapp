@@ -230,6 +230,16 @@ app.controller("administration", function($scope, $http, $route) {
 					}
 					
 				}
+
+				if (data.data.items[0].time != undefined) {
+					for (var d of data.data.items) {
+						let x = new Date();
+						x.setHours(d.time.substring(0,2));
+						x.setMinutes(d.time.substring(3,5));
+						x.setSeconds(d.time.substring(6,8));
+						d.time = x;
+					}
+				}
 			}
 			$scope.items = data.data.items;
 			

@@ -89,7 +89,12 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 			.then((data)=> {
 				if (data.data.items.length > 0) {
 					$scope.items = data.data.items[0];
-					$scope.items['date'] = $scope.items['date'].substring(0,10);
+					if ($scope.items.date.date != -1) {
+						$scope.items['date'] = $scope.items['date']['date'].substring(0,10);
+					} else {
+						$scope.items['date'] = null;
+					}
+					
 				}
 			}, 
 			(err)=> {
@@ -97,7 +102,12 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 			});
 	} else {
 		$scope.items = show;
-		$scope.items['date'] = show['date'].substring(0,10);
+		if ($scope.items.date.date != -1) {
+			$scope.items['date'] = show['date']['date'].substring(0,10);
+		} else {
+			$scope.items['date'] = null;
+		}
+
 	}
 	
 	

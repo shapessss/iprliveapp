@@ -1,5 +1,5 @@
 const { Pool, Client } = require('pg')
-//var connectionString = 'postgres://postgres:PASSWORD@localhost:5432/radio'
+//var connectionString = 'postgres://postgres:password@localhost:5432/radio'
 var connectionString = "postgres://xqfejbmovmcger:43150b88f6939c50ed733a25187d127d1a1b74a04b6531ac41b66158c7ad5f43@ec2-174-129-192-200.compute-1.amazonaws.com:5432/d36rhr4o68ln8e"
 const pool = new Pool({
   connectionString: connectionString,
@@ -57,8 +57,6 @@ CREATE TABLE IF NOT EXISTS SHOWS (
 	description VARCHAR(100),
 	image_thumbnail VARCHAR(100) REFERENCES IMAGES (image_id),
 	image_banner VARCHAR(100) REFERENCES IMAGES (image_id),
-	date DATE,
-	frequency VARCHAR(20),
 	featured BOOLEAN DEFAULT FALSE,
 	stream VARCHAR(200)
 );

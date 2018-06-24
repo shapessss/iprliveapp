@@ -1,5 +1,5 @@
 const { Pool, Client } = require('pg')
-//var connectionString = 'postgres://postgres:PASSWORD@localhost:5432/radio' LOCAL ONLY
+//var connectionString = 'postgres://postgres:password@localhost:5432/radio'
 var connectionString = "postgres://xqfejbmovmcger:43150b88f6939c50ed733a25187d127d1a1b74a04b6531ac41b66158c7ad5f43@ec2-174-129-192-200.compute-1.amazonaws.com:5432/d36rhr4o68ln8e"
 const pool = new Pool({
   connectionString: connectionString,
@@ -11,7 +11,7 @@ const pool = new Pool({
 /* --------------------- ---- ------------------------------ */
 /* --------------------- SHOW ------------------------------ */
 /* --------------------- ---- ------------------------------ */
-function add_show(name, description, image_thumbnail, image_banner, date, frequency, featured, stream, cb, cbid) {
+function add_show(name, description, image_thumbnail, image_banner, featured, stream, cb, cbid) {
 	//change true/false to 1/0
 	if (featured == true) {
 		featured = 1;
@@ -21,11 +21,11 @@ function add_show(name, description, image_thumbnail, image_banner, date, freque
 
 
 	let sql = `
-	INSERT INTO SHOWS(name, description, image_thumbnail, image_banner, date, frequency, featured, stream)
-	 VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+	INSERT INTO SHOWS(name, description, image_thumbnail, image_banner, featured, stream)
+	 VALUES($1, $2, $3, $4, $5, $6)
 	 RETURNING show_id;`;
 	
-	pool.query(sql, [name, description, image_thumbnail, image_banner, date, frequency, featured, stream], (err, row) => {
+	pool.query(sql, [name, description, image_thumbnail, image_banner, featured, stream], (err, row) => {
 		if (err) {
 			console.log(err)
 			return cb(409);
@@ -37,7 +37,7 @@ function add_show(name, description, image_thumbnail, image_banner, date, freque
 	})
 }
 
-function edit_show(show_id, name, description, image_thumbnail, image_banner, frequency, featured, stream, cb) {
+function edit_show(show_id, name, description, image_thumbnail, image_banner, featured, stream, cb) {
 	
 	
 	let sql = `
@@ -46,14 +46,13 @@ function edit_show(show_id, name, description, image_thumbnail, image_banner, fr
 		description = $2,
 		image_thumbnail = $3,
 		image_banner = $4,
-		frequency = $5,
-		featured = $6,
-		stream = $7
+		featured = $5,
+		stream = $6
 	WHERE 
-		show_id = $8
+		show_id = $7
 	`;
 
-	pool.query(sql, [name, description, image_thumbnail, image_banner, frequency, featured, stream, show_id], (err, row) => {
+	pool.query(sql, [name, description, image_thumbnail, image_banner, featured, stream, show_id], (err, row) => {
 		if (err) {
 			cb(409);
 		} else {
@@ -436,8 +435,9 @@ function delete_schedule(schedule_id, cb) {
 
 
 module.exports = {
-	add_show : function(name, description, image_thumbnail, image_banner, date, frequency, featured, stream, tracks, tags, residents, cb) {
-		add_show(name, description, image_thumbnail, image_banner, date, frequency, featured, stream, cb, (show_id)=> {
+	add_show : function(name, description, image_thumbnail, image_banner, featured, stream, tracks, tags, residents, cb) {
+		add_show(name, description, image_thumbnail, image_banner, featured, stream, cb, (show_id)=> {
+			console.log(show_id)
 			update_tracklist(show_id, tracks, ()=>{});
 			update_tags(show_id, tags, ()=>{});
 			update_show_resident_relations(show_id, residents, ()=>{});
@@ -445,8 +445,8 @@ module.exports = {
 
 		
 	},
-	edit_show : function(show_id, name, description, image_thumbnail, image_banner, date, frequency, featured, stream, tracks, tags, residents, cb) {
-		edit_show(show_id, name, description, image_thumbnail, image_banner, frequency, featured, stream, cb);
+	edit_show : function(show_id, name, description, image_thumbnail, image_banner, featured, stream, tracks, tags, residents, cb) {
+		edit_show(show_id, name, description, image_thumbnail, image_banner, featured, stream, cb);
 
 		update_tracklist(show_id, tracks, ()=>{});
 		update_tags(show_id, tags, ()=>{});
