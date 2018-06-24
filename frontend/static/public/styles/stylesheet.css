@@ -186,6 +186,7 @@ h4 {
   width: 125px;
   height: 40px;
   margin-right: 10px;
+  margin-left:auto; /* INCLUDE THIS WHILE SEARCH IS DOWN */
 }
 
 .right-nav {
