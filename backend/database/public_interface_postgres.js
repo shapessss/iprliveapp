@@ -48,6 +48,10 @@ function get_schedules(cb) {
 			}
 			let rows = res.rows;
 			let current = 0;
+			if (rows.length == current) {
+				done();
+				return cb([])
+			}
 			for (let r of rows) {
 				client.query("SELECT name FROM SHOWS WHERE show_id = $1", [r.show_id], (err, res)=> {
 					current += 1;
