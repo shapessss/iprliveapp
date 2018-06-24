@@ -14,23 +14,24 @@
 
 
 	<!-------------------------- SHOW LIST ---------------------------->
+	<div ng-if="resident.shows">
+		<h2 class = "show_heading">Shows</h2>
+		<div class = "featured_list">
 
-	<h2 class = "show_heading">Shows</h2>
-	<div class = "featured_list">
+			<div class = "featured" ng-repeat = "show in resident.shows">
+				<div class = "featured-image">
+					<div class = "play fas fa-play-circle"></div>
+					<img src = "public/images/uploads/{{show.image_thumbnail}}">
+				</div>
+				<div class = "description">
+					<span class = "title"><a href = "/shows/{{show.show_id}}" ng-click="set_show(show);">{{show.name}}</a></span>
+					<span class = "genre">
+						<a href = "/tags/{{tag.tag}}" ng-repeat = "tag in show.tags">{{tag.tag}},</a>	
+					</span>
+				</div>
+			</div>
 
-		<div class = "featured" ng-repeat = "show in resident.shows">
-			<div class = "featured-image">
-				<div class = "play fas fa-play-circle"></div>
-				<img src = "public/images/uploads/{{show.image_thumbnail}}">
-			</div>
-			<div class = "description">
-				<span class = "title"><a href = "/shows/{{show.show_id}}" ng-click="set_show(show);">{{show.name}}</a></span>
-				<span class = "genre">
-					<a href = "/tags/{{tag.tag}}" ng-repeat = "tag in show.tags">{{tag.tag}},</a>	
-				</span>
-			</div>
 		</div>
-
 	</div>
 
 </div>

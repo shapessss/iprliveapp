@@ -1,4 +1,4 @@
-const admin_interface = require('../database/admin_interface.js');
+const admin_interface = require('../database/admin_interface_pg.js');
 
 const multer  = require('multer')
 var storage = multer.diskStorage({
@@ -98,8 +98,7 @@ module.exports = {
 		app.post('/delete_show', (req, res)=>{
 			let params = ['show_id'];
 			let data = checkNulls(req, params)
-
-			if (data.length < params.length) {
+						if (data.length < params.length) {
 				res.json({'missingdata':params[data.length]});
 				return;
 			}
@@ -167,7 +166,7 @@ module.exports = {
 		app.post('/add_event', (req, res)=> {
 			let params = ['name', 'image_thumbnail', 'date', 'url'];
 			let data = checkNulls(req, params)
-
+			console.log(req.body['date'])
 			if (data.length < params.length) {
 				res.json({'missingdata':params[data.length]});
 				return;
@@ -248,6 +247,69 @@ module.exports = {
 
 		app.post('/delete_banner', (req, res)=> {
 			let params = ['banner_id'];
+			let data = checkNulls(req, params)
+
+
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
+
+			admin_interface.delete_banner(...data, (status)=>{
+				res.status(status).send();
+			})
+		})
+
+
+		/* --------------------- ---- ------------------------------ */
+		/* --------------------- SCHEDULE ------------------------- */
+		/* --------------------- ---- ------------------------------ */
+		app.post('/add_schedule', (req, res)=> {
+			let show_id = req.body['shows'][req.body['shows'].length - 1];
+			if (show_id != undefined) {
+				req.body['show_id'] = show_id.show_id;
+			}
+			let params = ['show_id', 'date', 'time'];
+
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
+			console.log(...data);
+			admin_interface.add_schedule(...data, (status, data=null)=>{
+				res.status(status).json({
+					item_id:data,
+					item_type:'schedule_id'
+				})
+			})
+		})
+
+		app.post('/edit_schedule', (req, res)=> {
+			let show_id = req.body['shows'][req.body['shows'].length - 1];
+			if (show_id != undefined) {
+				req.body['show_id'] = show_id.show_id;
+			}
+			let params = ['schedule_id', 'show_id', 'date', 'time'];
+
+			let data = checkNulls(req, params)
+
+			if (data.length < params.length) {
+				res.json({'missingdata':params[data.length]});
+				return;
+			}
+
+			admin_interface.edit_schedule(...data, (status, data=null)=>{
+				res.status(status).json({
+					item_id:data,
+					item_type:'schedule_id'
+				})
+			})
+		})
+
+		app.post('/delete_schedule', (req, res)=> {
+			let params = ['schedule_id'];
 			let data = checkNulls(req, params)
 
 

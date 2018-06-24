@@ -23,6 +23,10 @@ app.config(function($routeProvider, $locationProvider) {
 	    	templateUrl:'administration.html',
 	    	item_type:'event'
 	    })
+	     .when("/schedule", {
+	    	templateUrl:'administration.html',
+	    	item_type:'schedule'
+	    })
 
 
 	    .when("/login", {

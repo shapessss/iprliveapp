@@ -9,10 +9,8 @@ let radioTimer = setInterval(function() {
 
 
 function callApi() {
-	console.log("callapi")
 	let extra = '&' + new Date().getTime();
 	fetch(radio+extra).then(function(data){return data.json()}).then(function(data){
-		console.log(data)
 		$('#media').html('Now live: ' + data.nowplaying)
 	})
 }

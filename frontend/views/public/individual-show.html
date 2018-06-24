@@ -13,7 +13,7 @@
 				{{items.name}}
 			</h1>
 			<h2 style="border-bottom: 2px solid #000;">
-				{{items.date}}
+				Next playing {{items.date}}
 			</h2>
 			<h3>
 				{{items.description}}
@@ -25,17 +25,18 @@
 		</div>
 
 
-		<!-- tracklist description start here -->
-		<div class="episode-tracklist">
-		<h2>
-			tracklist
-		</h2>
+		<!-- tracklist description start here -->		
+		<div class="episode-tracklist" ng-if="item.tracks">
+			<h2>
+				tracklist
+			</h2>
 
-		<ul class="episode-tracks">
-			<li class="show" ng-repeat= "track in items.tracks">
-				{{track.title}} - {{track.artist}}
-			</li>
-		</ul>
+			<ul class="episode-tracks">
+				<li class="show" ng-repeat= "track in items.tracks">
+					{{track.title}} - {{track.artist}}
+				</li>
+			</ul>
 		</div>
+		
 	</div>
 </div>

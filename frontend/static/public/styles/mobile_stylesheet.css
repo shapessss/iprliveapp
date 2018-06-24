@@ -105,6 +105,57 @@
 	margin-bottom:20px;
 }
 
+/* -----------=== S C H E D U L E * P A G E ====------------ */
+
+
+
+
+th {
+    font-size: .8em;
+    font-weight: 500;
+}
+
+
+.schedule {
+    border-top: 2px solid #fff;
+    margin-left:0;
+    padding-right:20px;
+}
+
+.schedule table, .schedule tr , .schedule td, .schedule tbody {display: block}
+
+.schedule table {
+    padding: .8rem 20px;
+    font-size: 1.2em;
+    width:100%;
+
+}
+
+
+.schedule thead {
+    display:none;
+}
+
+
+.schedule td {
+    font-size: .85em;
+    width:100%;
+}
+
+.schedule a {
+    color:white;
+    text-decoration: underline;
+}
+
+.schedule a:hover {
+    color:red;
+}
+
+
+.schedule table th {
+    text-align: left;
+}
+
 }
 
 

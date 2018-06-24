@@ -1,4 +1,5 @@
 const { Pool, Client } = require('pg')
+//var connectionString = 'postgres://postgres:PASSWORD@localhost:5432/radio'
 var connectionString = "postgres://xqfejbmovmcger:43150b88f6939c50ed733a25187d127d1a1b74a04b6531ac41b66158c7ad5f43@ec2-174-129-192-200.compute-1.amazonaws.com:5432/d36rhr4o68ln8e"
 const pool = new Pool({
   connectionString: connectionString,
@@ -12,7 +13,7 @@ const pool = new Pool({
 -------------------- IMAGES -------------------------
 ---------------------------------------------------*/
 let image_sql = `
-CREATE TABLE IMAGES (
+CREATE TABLE IF NOT EXISTS IMAGES (
 	image_id VARCHAR(100) PRIMARY KEY,
 	imagename VARCHAR(100)
 );
@@ -23,7 +24,7 @@ CREATE TABLE IMAGES (
 -------------------- BANNERS -------------------------
 ---------------------------------------------------*/
 let banner_table = `
-CREATE TABLE BANNERS (
+CREATE TABLE IF NOT EXISTS BANNERS (
 	banner_id SERIAL PRIMARY KEY,
 	name VARCHAR(100),
 	description VARCHAR(100),
@@ -111,6 +112,15 @@ CREATE TABLE IF NOT EXISTS SHOW_RESIDENT_RELATIONSHIPS (
 
 
 
+let schedule_table = `
+CREATE TABLE IF NOT EXISTS SCHEDULE (
+	schedule_id SERIAL PRIMARY KEY,
+	show_id INTEGER REFERENCES SHOWS(show_id),
+	date DATE,
+	time TIME
+)
+`;
+
 
 
 
@@ -118,29 +128,65 @@ function add_table() {
 	pool.connect((err, client, done) => {
 		if (err) throw err;
 
+		
+		let tables = 0;
+		let queries = 9;
+		
+		client.query(image_sql, (err, res)=> {
+			tables += 1;
+			if (tables == queries) done();
+			if (err) console.log(err);
+		})
+
+		client.query(banner_table, (err, res)=> {
+			tables += 1;
+			if (tables == queries) done();
+			if (err) console.log(err);
+		})
+
+		client.query(events_table, (err, res)=> {
+			tables += 1;
+			if (tables == queries) done();
+			if (err) console.log(err);
+		})
+
+		client.query(show_table, (err, res)=> {
+			tables += 1;
+			if (tables == queries) done();
+			if (err) console.log(err);
+		})
+
 		client.query(track_table, (err, res)=> {
-			done();
+			tables += 1;
+			if (tables == queries) done();
 			if (err) console.log(err);
 		})
 		client.query(tag_table, (err, res)=> {
-			done();
+			tables += 1;
+			if (tables == queries) done();
 			if (err) console.log(err);
 		})
 		client.query(res_table, (err, res)=> {
-			done();
+			tables += 1;
+			if (tables == queries) done();
 			if (err) console.log(err);
 		})
 
 		client.query(res_shows_table, (err, res)=> {
-			done();
+			tables += 1;
+			if (tables == queries) done();
 			if (err) console.log(err);
 		})
 
+		
+
+		client.query(schedule_table, (err, res)=>{
+			tables += 1;
+			if (tables == queries) done();
+		})
 
 	})
 }
 
 
-module.exports = {
-	add_table : function() {add_table()}
-}
+module.exports = {add_table: function(){add_table()}}

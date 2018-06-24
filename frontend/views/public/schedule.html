@@ -1,0 +1,24 @@
+<div ng-controller = "schedule">
+  <h2 class = "show_heading"> schedule </h2>
+  <h3 class= "show_heading sub-title"> - upcoming shows</h3>
+
+
+
+  <div class="schedule">
+    <table>
+      <thead>
+        <tr>
+          <th>SHOW</th>
+          <th>DATE</th>
+          <th>TIME</th>
+        </tr>
+      </thead>
+      <tr ng-repeat = "item in items">
+        <td><a href = "/shows/{{item.show_id}}">{{item.show_name}}</a></td>
+        <td>{{item.date.substring(0,10)}}</td>
+        <td>{{item.time.substring(0,5)}}</td>
+        
+      </tr>
+    </table>
+  </div>
+</div>

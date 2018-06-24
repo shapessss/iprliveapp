@@ -6,11 +6,8 @@
 		font-style: normal;
 }
 
-
 html, body {height:100%;}
 .ng-scope {min-height: 100%;}
-
-
 
 body {
 	margin: 0;
@@ -421,6 +418,7 @@ h4 {
 .show_heading {
 	display: inline-block;
 	margin-top: 45px;
+	margin-left:50px;
 }
 
 .intro_text_wrapper {
@@ -460,7 +458,12 @@ h4 {
 	cursor: pointer;
 }
 
-.featured .featured-image {position:relative;}
+.featured .featured-image {
+	position:relative;
+	height:300px;
+	overflow: hidden;
+	display: block;
+}
 
 .featured img {
 	width:100%;
@@ -515,16 +518,16 @@ span.genre {
 
 
 .events {
-	position:absolute;
-	top:calc(50% - 50px);
-	left:calc(50% - 80px) !important;
+	top: calc(50% - 50px);
+	left:calc(50% - 50px);
 	text-transform: uppercase;
-	font-size: 1.1rem !important;
+	font-size: 1.1rem;
 	font-weight: 500;
 	background-color: #000;
-	color: white !important;
-	border-radius: 0% !important;
+	border: solid 1px black;
+	color: white;
 	padding: 3px;
+	position: absolute;
 }
 
 
@@ -538,7 +541,7 @@ span.genre {
 	border: solid 1px white;
 }
 
-.featured-events:hover .events{
+.featured-image:hover .events{
 	border: solid 1px white;
 }
 
@@ -926,16 +929,9 @@ span.genre {
 
 
 /* -----------=== S C H E D U L E * P A G E ====------------ */
-.schedule-heading {
-  margin-left: 3vw;
-	border-bottom: 2px solid #fff;
-}
 
 
-.container {
-	width: 100%;
-	margin-left: 1.5vw;
-}
+
 
 th {
 	font-size: .8em;
@@ -943,29 +939,48 @@ th {
 }
 
 
-.body table {
+.schedule {
+	border-top: 2px solid #fff;
+	margin-left:50px;
+	margin-right:50px;
+}
+
+.schedule table {
 	padding: .8rem 20px;
 	font-size: 1.2em;
-	width: 100%;
+	width:100%;
+
 }
 
 
-.body thead {
+.schedule thead {
 	font-size: 1.3em;
 }
 
 
-.body td {
+.schedule td {
 	font-size: .85em;
 }
 
+.schedule a {
+	color:white;
+	text-decoration: underline;
+}
 
-.body table th {
+.schedule a:hover {
+	color:red;
+}
+
+
+.schedule table th {
 	text-align: left;
 }
 
 
-
+.schedule tr {
+	 border-bottom: solid 1px white;
+	 width:100%;
+}
 
 
 

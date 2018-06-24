@@ -14,13 +14,15 @@ app.controller("administration", function($scope, $http, $route) {
 		tags:[],
 		tracks:[],
 		residents:[],
-		shows:[]
+		shows:[],
+		time: new Date()
 	};
 	$scope.edit_item = {
 		tags:[],
 		tracks:[],
 		residents:[],
-		shows:[]
+		shows:[],
+		time: new Date()
 	};
 
 
@@ -80,9 +82,17 @@ app.controller("administration", function($scope, $http, $route) {
 				} else {
 					$('#message').html("Successfully added." + html);
 					let i = $scope.add_item;
+					console.log(data.data)
 					i[data.data.item_type] = data.data.item_id;
 					$scope.items.push(i);
 					$('.add').fadeOut();
+					$scope.add_item = {
+						tags:[],
+						tracks:[],
+						residents:[],
+						shows:[],
+						time: new Date()
+					};
 				}
 
 				console.log(data);
@@ -222,6 +232,7 @@ app.controller("administration", function($scope, $http, $route) {
 				}
 			}
 			$scope.items = data.data.items;
+			
 		}, 
 		(err)=> {
 

@@ -50,12 +50,8 @@ app.all("*", function(req, res, next) {
 });
 
 
-
-const postgres_setup = require('./backend/database/postgres_setup.js');
-postgres_setup.add_table();
-
-
-
+const setup = require('./backend/database/postgres_setup.js');
+//setup.add_table();
 
 
 app.listen(process.env.PORT || 3000, () => console.log('Running on port 3000'))

@@ -1,6 +1,6 @@
 //same as db for now, do logic and filtering on client side
 
-const public_interface = require('../database/public_interface.js');
+const public_interface = require('../database/public_interface_postgres.js');
 
 
 module.exports = {
@@ -64,6 +64,12 @@ module.exports = {
 
 		app.get('/events', (req, res)=>{
 			public_interface.get_events((rows)=>{
+				res.json({"items":rows})
+			})
+		});
+
+		app.get('/schedules', (req, res)=>{
+			public_interface.get_schedules((rows)=>{
 				res.json({"items":rows})
 			})
 		});

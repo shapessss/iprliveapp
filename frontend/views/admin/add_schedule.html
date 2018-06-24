@@ -1,0 +1,19 @@
+<label>Schedule show</label>
+
+<div class = "tag">
+	<div>Show id: {{add_item['shows'][add_item['shows'].length - 1].show_id}}</div>
+	<div class = "remove_field" ng-click="add_item['shows'] = []">-</div>
+</div>
+<input type = "submit" value = "Add a show" ng-click="choose_relation(add_item, 'shows', 'shows')">
+
+<label>Schedule date</label>
+<input type = "date" ng-model="add_item['date']">
+
+
+
+
+<label>Schedule hour</label>
+<input type = "time" ng-model="add_item['time']" step="1">
+
+
+<input type = "submit" value = "Save" ng-click="save()">

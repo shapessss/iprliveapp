@@ -5,9 +5,9 @@
 	<div class = "featured_list">
 
 		<div class = "featured" ng-repeat = "resident in items">
-			<div class = "featured-image">
+			<div class = "featured-image tile-active">
 				<a href="/residents/{{resident.resident_id}}" ng-click="set_resident(resident);">
-					<img src = "public/images/uploads/{{resident.image_thumbnail}}" class= "tile-active">
+					<img src = "public/images/uploads/{{resident.image_thumbnail}}">
 				</a>
 			</div>
 			<div class = "description">

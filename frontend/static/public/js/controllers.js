@@ -83,12 +83,13 @@ app.controller('all_shows', function($scope, $http, $routeParams, individual_cli
 
 app.controller('individual_show', function($scope, $http, $routeParams, individual_clicked) {
 	let show = individual_clicked.get_show();
-	console.log(show);
+	
 	if (show == null) {
 		$http.get('api/public/show?show_id=' + $routeParams.show_id)
 			.then((data)=> {
 				if (data.data.items.length > 0) {
 					$scope.items = data.data.items[0];
+					$scope.items['date'] = $scope.items['date'].substring(0,10);
 				}
 			}, 
 			(err)=> {
@@ -96,6 +97,7 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 			});
 	} else {
 		$scope.items = show;
+		$scope.items['date'] = show['date'].substring(0,10);
 	}
 	
 	
@@ -140,6 +142,24 @@ app.controller('individual_resident', function($scope, $http, $routeParams, indi
 app.controller('events', function($scope, $http) {
 	$http.get('api/public/events')
 		.then((data)=> {
+			function futureDate(d) {
+				let x = new Date(d['date']); //string to date
+				return x > new Date()
+			}
+			let future = data.data.items.filter(futureDate);
+			console.log(data.data.items);
+			$scope.items = future;
+		}, 
+		(err)=> {
+
+		});
+});
+
+
+app.controller('schedule', function($scope, $http) {
+	$http.get('api/public/schedules')
+		.then((data)=> {
+			console.log(data.data.items);
 			$scope.items = data.data.items;
 		}, 
 		(err)=> {
