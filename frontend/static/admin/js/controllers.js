@@ -31,7 +31,7 @@ app.controller("administration", function($scope, $http, $route) {
 
 	//validate jwt
 
-	function validate() {
+	function validate(cb) {
 		let url = '/api/admin/add_banner';
 		let config = {
 			method:'POST',
@@ -44,15 +44,85 @@ app.controller("administration", function($scope, $http, $route) {
 
 		$http(config)
 			.then((data)=> {
-				console.log("successfuly auth")
+				cb(true);
 			}, (err)=> {
 				if (err.status >= 300 & err.status < 400) {
+					cb(false);
 					window.location.href = err.data;
 				}
 			})
 	}
 
-	validate();
+	validate((auth)=> {
+		if (!auth) {
+			return
+		}
+
+		//get current object
+		$http.get('/api/public/' + $scope.item_type + 's')
+			.then((data)=> {
+				//convert date if there
+				if (data.data.items.length > 0) {
+					if (data.data.items[0].date != undefined) {
+						for (var d of data.data.items) {
+							d.date = new Date(d.date);
+						}
+						
+					}
+
+					if (data.data.items[0].time != undefined) {
+						for (var d of data.data.items) {
+							let x = new Date();
+							x.setHours(d.time.substring(0,2));
+							x.setMinutes(d.time.substring(3,5));
+							x.setSeconds(d.time.substring(6,8));
+							d.time = x;
+						}
+					}
+				}
+				$scope.items = data.data.items;
+				console.log(data.data.items);
+			}, 
+			(err)=> {
+
+			});
+
+		//get images
+		$http.get('/api/admin/images')
+			.then((data)=> {
+				$scope['images'] = data.data.items;
+			}, 
+			(err)=> {
+
+			});
+
+
+		//get shows
+		if ($scope.item_type != 'show') {
+			$http.get('/api/public/shows')
+				.then((data)=> {
+					$scope['shows'] = data.data.items;
+				}, 
+				(err)=> {
+
+				});
+		}
+		
+
+
+		//get residents
+		if ($scope.item_type != 'resident') {
+			$http.get('/api/public/residents')
+				.then((data)=> {
+					$scope['residents'] = data.data.items;
+				}, 
+				(err)=> {
+
+				});
+		}
+
+	});
+	
 
 
 
@@ -217,68 +287,7 @@ app.controller("administration", function($scope, $http, $route) {
 	}
 
 
-	//get current object
-	$http.get('/api/public/' + $scope.item_type + 's')
-		.then((data)=> {
-			//convert date if there
-			if (data.data.items.length > 0) {
-				if (data.data.items[0].date != undefined) {
-					for (var d of data.data.items) {
-						d.date = new Date(d.date);
-					}
-					
-				}
-
-				if (data.data.items[0].time != undefined) {
-					for (var d of data.data.items) {
-						let x = new Date();
-						x.setHours(d.time.substring(0,2));
-						x.setMinutes(d.time.substring(3,5));
-						x.setSeconds(d.time.substring(6,8));
-						d.time = x;
-					}
-				}
-			}
-			$scope.items = data.data.items;
-			console.log(data.data.items);
-		}, 
-		(err)=> {
-
-		});
-
-	//get images
-	$http.get('/api/admin/images')
-		.then((data)=> {
-			$scope['images'] = data.data.items;
-		}, 
-		(err)=> {
-
-		});
-
-
-	//get shows
-	if ($scope.item_type != 'show') {
-		$http.get('/api/public/shows')
-			.then((data)=> {
-				$scope['shows'] = data.data.items;
-			}, 
-			(err)=> {
-
-			});
-	}
 	
-
-
-	//get residents
-	if ($scope.item_type != 'resident') {
-		$http.get('/api/public/residents')
-			.then((data)=> {
-				$scope['residents'] = data.data.items;
-			}, 
-			(err)=> {
-
-			});
-	}
 
 
 	//upload an image
