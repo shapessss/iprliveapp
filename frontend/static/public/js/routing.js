@@ -26,6 +26,10 @@ app.config(function($routeProvider, $locationProvider) {
         templateUrl : "individual-resident.html"
     })
 
+    .when("/guests", {
+        templateUrl : "guests.html"
+    })
+
     .when("/events", {
         templateUrl : "events.html"
     })

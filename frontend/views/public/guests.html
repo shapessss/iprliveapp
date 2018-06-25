@@ -1,0 +1,22 @@
+
+<div ng-controller="all_guests">
+	<h1 class = "show_heading">Guests</h1>
+	<h3 class= "show_heading sub-title"> - ocal and international guests jumping on the airwaves for one-offs</h3>
+	<div class = "featured_list">
+
+		<div class = "featured" ng-repeat = "resident in items">
+			<div class = "featured-image tile-active">
+				<a href="/residents/{{resident.resident_id}}" ng-click="set_resident(resident);">
+					<img src = "public/images/uploads/{{resident.image_thumbnail}}">
+				</a>
+			</div>
+			<div class = "description">
+				<span class = "title"><a href = "/residents/{{resident.resident_id}}" ng-click="set_resident(resident);">{{resident.name}}</a></span>
+				<span class = "genre">
+					{{resident.description}}	
+				</span>
+			</div>
+		</div>
+
+	</div>
+</div>

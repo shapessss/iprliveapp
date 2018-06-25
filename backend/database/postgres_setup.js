@@ -120,6 +120,16 @@ CREATE TABLE IF NOT EXISTS SCHEDULE (
 `;
 
 
+let alter_table_schedule = `
+ALTER TABLE SCHEDULE 
+ALTER DATE TYPE VARCHAR(30);
+`;
+let alter_table_events = `
+ALTER TABLE EVENTS 
+ALTER DATE TYPE VARCHAR(30);
+`;
+
+
 
 
 function add_table() {
@@ -187,4 +197,27 @@ function add_table() {
 }
 
 
-module.exports = {add_table: function(){add_table()}}
+function alter_table() {
+	pool.connect((err, client, done) => {
+		if (err) throw err;
+
+		let tables = 0;
+		let queries = 2;
+
+		client.query(alter_table_events, (err, res)=>{
+			tables += 1;
+			if (tables == queries) done();
+		})
+
+		client.query(alter_table_schedule, (err, res)=>{
+			tables += 1;
+			if (tables == queries) done();
+		})
+	});
+}
+
+
+module.exports = {
+	add_table: function(){add_table()},
+	alter_table: function(){alter_table()}
+}

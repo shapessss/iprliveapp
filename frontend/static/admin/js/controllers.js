@@ -82,7 +82,6 @@ app.controller("administration", function($scope, $http, $route) {
 				} else {
 					$('#message').html("Successfully added." + html);
 					let i = $scope.add_item;
-					console.log(data.data)
 					i[data.data.item_type] = data.data.item_id;
 					$scope.items.push(i);
 					$('.add').fadeOut();
@@ -95,7 +94,6 @@ app.controller("administration", function($scope, $http, $route) {
 					};
 				}
 
-				console.log(data);
 
 				$('#message').show();
 			}, (err)=>{
@@ -242,7 +240,7 @@ app.controller("administration", function($scope, $http, $route) {
 				}
 			}
 			$scope.items = data.data.items;
-			
+			console.log(data.data.items);
 		}, 
 		(err)=> {
 

@@ -586,24 +586,29 @@ span.genre {
   width: 100%;
   display:none;
   font-size: 14px;
+  height:60px;
+}
+
+
+#mixcloud iframe {
+	position: absolute;
+	bottom:0;
 }
 
 #hide_mixcloud {
-  position:absolute;
-  top:-50px;
-  right:10px;
-  width:50px;
-  height:50px;
-  background:black;
-  color:white;
-  border:solid 1px white;
-  border-bottom:none;
-  cursor:pointer;
-  text-align:center;
-  line-height:50px;
+    position: absolute;
+    top: -20px;
+    right: 0;
+    width: 50px;
+    height: 20px;
+    background: #25292c;
+    color: #bbb7b7;
+    border: solid 1px black;
+    border-bottom: none;
+    cursor: pointer;
+    text-align: center;
+    display:none;
 }
-
-
 
 
 
@@ -667,62 +672,7 @@ span.genre {
 
 
 
-/* ----------------- INDIVIDUAL SHOW ---------------------- */
-.show {
-	position: relative;
-	width:100%;
-	top:10px;
-}
 
-.show .show-image {
-	position:relative;
-	left:50px;
-	top:25px;
-	width:512px;
-	max-width:100%;
-	height:auto;
-}
-
-
-.show .content {
-	position:absolute;
-	left:562px;
-	top:100px;
-	color:white;
-
-}
-
-
-.show .description {
-	position:relative;
-	left:-20px;
-	min-width:150px;
-	background:black;
-}
-
-.show .artist {
-	position:relative;
-	left:-35px;
-	min-width:150px;
-	text-transform: uppercase;
-	background:black;
-}
-
-
-.show .date {
-	position:relative;
-	left:0;
-	min-width:150px;
-	background:black;
-}
-
-
-.show iframe {
-	position: absolute;
-	top: 100%;
-	width: 512px;
-	left: 50px;
-}
 
 
 

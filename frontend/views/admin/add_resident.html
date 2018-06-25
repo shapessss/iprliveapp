@@ -29,6 +29,6 @@
 
 
 <label>Resident is guest</label>
-<input type = "checkbox" ng-model="add_item['guest']" ng-checked="add_item['guest']">
+<input type = "checkbox" ng-model="add_item['guest']" ng-checked="add_item['guest']"  ng-init="add_item['guest'] = false">
 
 <input type = "submit" value = "Save" ng-click="save()">

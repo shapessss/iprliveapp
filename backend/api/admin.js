@@ -166,7 +166,6 @@ module.exports = {
 		app.post('/add_event', (req, res)=> {
 			let params = ['name', 'image_thumbnail', 'date', 'url'];
 			let data = checkNulls(req, params)
-			console.log(req.body['date'])
 			if (data.length < params.length) {
 				res.json({'missingdata':params[data.length]});
 				return;

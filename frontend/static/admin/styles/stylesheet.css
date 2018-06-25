@@ -213,3 +213,16 @@ input[type='checkbox'] {
 	margin-bottom:10px;
 	width:250px;
 }
+
+
+
+.remove_field {
+	display: inline-block;
+    background: red;
+    width: 20px;
+    color: white;
+    text-align: center;
+    height: 20px;
+    font-weight: 800;
+    cursor: pointer;
+}

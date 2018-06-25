@@ -89,11 +89,7 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 			.then((data)=> {
 				if (data.data.items.length > 0) {
 					$scope.items = data.data.items[0];
-					if ($scope.items.date.date != -1) {
-						$scope.items['date'] = $scope.items['date']['date'].substring(0,10);
-					} else {
-						$scope.items['date'] = null;
-					}
+					show_loaded();
 					
 				}
 			}, 
@@ -102,12 +98,25 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 			});
 	} else {
 		$scope.items = show;
+		show_loaded();
+
+
+		
+
+
+	}
+
+
+
+	function show_loaded() {
 		if ($scope.items.date.date != -1) {
-			$scope.items['date'] = show['date']['date'].substring(0,10);
+			$scope.items['date'] = $scope.items['date']['date'].substring(0,10);
 		} else {
 			$scope.items['date'] = null;
 		}
 
+		//load mixcloud
+		show_mixcloud($scope.items.stream);
 	}
 	
 	
@@ -117,7 +126,8 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 app.controller('all_residents', function($scope, $http, individual_clicked) {
 	$http.get('api/public/residents')
 		.then((data)=> {
-			$scope.items = data.data.items;
+			let residents = data.data.items.filter(filter_guests);
+			$scope.items = residents;
 		}, 
 		(err)=> {
 
@@ -125,6 +135,10 @@ app.controller('all_residents', function($scope, $http, individual_clicked) {
 
 	$scope.set_resident = function(resident) {
 		individual_clicked.set_resident(resident);
+	}
+
+	function filter_guests(r) {
+		return r.guest == false;
 	}
 });
 
@@ -149,28 +163,52 @@ app.controller('individual_resident', function($scope, $http, $routeParams, indi
 	document.getElementById("banner").setAttribute("style", "height:" + window.innerHeight * 0.8 + "px;")
 });
 
-app.controller('events', function($scope, $http) {
-	$http.get('api/public/events')
+
+
+app.controller('all_guests', function($scope, $http, individual_clicked) {
+	$http.get('api/public/guests')
 		.then((data)=> {
-			function futureDate(d) {
-				let x = new Date(d['date']); //string to date
-				return x > new Date()
-			}
-			let future = data.data.items.filter(futureDate);
-			console.log(data.data.items);
-			$scope.items = future;
+			$scope.items = data.data.items;
 		}, 
 		(err)=> {
 
 		});
+
+	$scope.set_resident = function(resident) {
+		individual_clicked.set_resident(resident);
+	}
+});
+
+
+
+app.controller('events', function($scope, $http) {
+	$http.get('api/public/events')
+		.then((data)=> {
+			
+			
+			let future = data.data.items.filter(futureDate);
+			for (let i of future) {
+				i.date = format_date(i.date);
+			}
+			$scope.items = future;
+			console.log(future);
+		}, 
+		(err)=> {
+
+		});
+
+
 });
 
 
 app.controller('schedule', function($scope, $http) {
 	$http.get('api/public/schedules')
 		.then((data)=> {
-			console.log(data.data.items);
-			$scope.items = data.data.items;
+			let future = data.data.items.filter(futureDate);
+			for (let i of future) {
+				i.date = format_date(i.date);
+			}
+			$scope.items = future;
 		}, 
 		(err)=> {
 
@@ -235,4 +273,17 @@ function sort_by_featured(items) {
 	}
 	return featured;
 	
+}
+
+function futureDate(d) {
+	let x = new Date(d['date']); //string to date
+	return x > new Date()
+}
+
+
+function format_date(utc) {
+	//given utc date 
+	//return local date in dd-mm-yyyy
+	let n = new Date(utc);
+	return n.getDate() + '-' + (n.getMonth() + 1) + '-' + n.getFullYear();
 }

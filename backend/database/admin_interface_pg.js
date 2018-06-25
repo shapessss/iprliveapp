@@ -1,5 +1,5 @@
 const { Pool, Client } = require('pg')
-//var connectionString = 'postgres://postgres:password@localhost:5432/radio'
+var connectionString = 'postgres://postgres:password@localhost:5432/radio'
 var connectionString = "postgres://xqfejbmovmcger:43150b88f6939c50ed733a25187d127d1a1b74a04b6531ac41b66158c7ad5f43@ec2-174-129-192-200.compute-1.amazonaws.com:5432/d36rhr4o68ln8e"
 const pool = new Pool({
   connectionString: connectionString,
@@ -27,7 +27,6 @@ function add_show(name, description, image_thumbnail, image_banner, featured, st
 	
 	pool.query(sql, [name, description, image_thumbnail, image_banner, featured, stream], (err, row) => {
 		if (err) {
-			console.log(err)
 			return cb(409);
 		}
 		
@@ -63,7 +62,6 @@ function edit_show(show_id, name, description, image_thumbnail, image_banner, fe
 
 function delete_show(show_id, cb) {
 	let sql = 'DELETE FROM SHOWS WHERE show_id = $1;'
-	console.log(show_id)
 	pool.query(sql, [show_id], (err, row) => {
 		if (err) {
 			cb(409);
@@ -122,12 +120,10 @@ function update_tags(show_id, tags, cb) {
 
 	pool.connect((err, client, done)=> {
 		if (err) throw err;
-		console.log(tags);
 		client.query(del_sql, [show_id], (e, r) => {
 			for (var t of tags) {
 				
 				client.query(add_sql, [show_id, t['tag']], (err, row)=>{
-					console.log(err);
 					current += 1;
 					if (current == tags.length) {
 						cb();
@@ -211,12 +207,11 @@ function delete_resident(id, cb) {
 
 function add_event(name, image_thumbnail, date, url, cb) {
 	let sql = 'INSERT INTO EVENTS(name, image_thumbnail, date, url) VALUES($1, $2, $3, $4) RETURNING event_id;';
-
 	
 
 	pool.query(sql, [name, image_thumbnail, date, url], (err, row) => {
 		if (err) return cb(409);
-
+		
 		let event_id = row.rows[0].event_id;
 		cb(200, event_id);
 	})
@@ -313,7 +308,6 @@ function add_image(image_id, imagename, cb) {
 	let sql = 'INSERT INTO IMAGES (image_id, imagename) VALUES ($1, $2);'
 	pool.query(sql, [image_id, imagename], (err, row)=> {
 		if (err) return cb(409);
-		console.log(row);
 		cb(200);
 	})
 }
@@ -398,7 +392,6 @@ function add_schedule(show_id, date, time, cb) {
 	time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 	let sql = 'INSERT INTO SCHEDULE (show_id, date, time) VALUES ($1, $2, $3) RETURNING schedule_id;'
 	pool.query(sql, [show_id, date, time], (err, row)=>{
-		console.log(row);
 		if (err) return cb(409);
 
 		let schedule_id = row.rows[0].schedule_id;
@@ -437,7 +430,6 @@ function delete_schedule(schedule_id, cb) {
 module.exports = {
 	add_show : function(name, description, image_thumbnail, image_banner, featured, stream, tracks, tags, residents, cb) {
 		add_show(name, description, image_thumbnail, image_banner, featured, stream, cb, (show_id)=> {
-			console.log(show_id)
 			update_tracklist(show_id, tracks, ()=>{});
 			update_tags(show_id, tags, ()=>{});
 			update_show_resident_relations(show_id, residents, ()=>{});

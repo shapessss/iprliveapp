@@ -6,6 +6,7 @@ const pool = new Pool({
 })
 
 
+
 /*
 pool.connect((err, client, done) => {
 		if (err) throw err;
@@ -29,7 +30,6 @@ function get_banners(cb) {
 function get_events(cb) {
 	pool.query("SELECT * FROM EVENTS ORDER BY DATE DESC", (err, res) => {
 		if (err) return cb([]);
-
 		cb(res.rows);
 	})
 }
@@ -57,8 +57,8 @@ function get_schedules(cb) {
 					current += 1;
 					r.show_name = res.rows[0]['name'];
 					r.shows = [{show_id: r.show_id}]
-					let date = r['date'].getDate() + "-" + r['date'].getMonth() + "-" + r['date'].getFullYear()
-					r['name'] = r.show_name + " playing " + date
+					//let date = r['date'].getDate() + "-" + r['date'].getMonth() + "-" + r['date'].getFullYear()
+					r['name'] = r.show_name 
 
 					if (current == rows.length) {
 						done();
@@ -221,6 +221,7 @@ function get_next_playing(show_id, cb) {
 				return cb(r);
 			}
 		}
+		return cb({date:-1})
 	})
 }
 
@@ -244,6 +245,7 @@ function get_shows(show_list, cb) {
 		//get tags
 		get_tags_by_show(show.show_id, (res)=> {
 			show.tags = res;
+			console.log('tags');
 			if (show.residents != null && show.tracks != null && show.date != null) {
 				current_complete += 1;
 				if (current_complete >= total) {
@@ -256,6 +258,7 @@ function get_shows(show_list, cb) {
 		
 		get_residents_by_show(show.show_id, (res)=> {
 			show.residents = res;
+			console.log('res');
 			if (show.tags != null && show.tracks != null && show.date != null) {
 				current_complete += 1;
 				if (current_complete >= total) {
@@ -268,6 +271,7 @@ function get_shows(show_list, cb) {
 		
 		get_tracks_by_show(show.show_id, (res)=> {
 			show.tracks = res;
+			console.log('trac');
 			if (show.tags != null && show.residents != null && show.date != null) {
 				current_complete += 1;
 				if (current_complete >= total) {
@@ -279,8 +283,7 @@ function get_shows(show_list, cb) {
 
 
 		get_next_playing(show.show_id, (res)=> {
-			console.log(res);
-			console.log('!')
+			console.log('date');
 			show.date = res;
 			if (show.tags != null && show.residents != null && show.tracks != null) {
 				current_complete += 1;
@@ -312,6 +315,15 @@ function get_individual_resident(resident_id, cb) {
 
 function get_all_residents(cb) {
 	pool.query("SELECT * FROM RESIDENTS", (err, rows) => {
+		if (err) throw err;
+
+		get_residents(rows.rows, cb);
+	})
+}
+
+
+function get_all_guests(cb) {
+	pool.query("SELECT * FROM RESIDENTS WHERE GUEST = TRUE", (err, rows) => {
 		if (err) throw err;
 
 		get_residents(rows.rows, cb);
@@ -389,5 +401,6 @@ module.exports = {
 	get_all_shows: function(cb) {get_all_shows(cb)},
 
 	get_all_residents: function(cb) {get_all_residents(cb)},
+	get_all_guests: function(cb) {get_all_guests(cb)},
 	get_individual_resident: function(resident_id, cb) {get_individual_resident(resident_id, cb)}
 }

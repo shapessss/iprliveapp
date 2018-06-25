@@ -60,6 +60,12 @@ module.exports = {
 			})
 		});
 
+		app.get('/guests', (req, res)=>{
+			public_interface.get_all_guests((rows)=>{
+				res.json({"items":rows})
+			})
+		});
+
 
 
 		app.get('/events', (req, res)=>{
