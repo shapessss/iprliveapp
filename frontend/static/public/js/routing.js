@@ -9,42 +9,52 @@ var app = angular.module("radio", ["ngRoute"]);
 app.config(function($routeProvider, $locationProvider) {
     $routeProvider
     .when("/", {
-        templateUrl : "home.html"
+        templateUrl : "home.html",
+        title:"internetpublicradio"
     })
 
     .when("/shows", {
-        templateUrl : "shows.html"
+        templateUrl : "shows.html",
+        title:"internetpublicradio - shows"
     })
     .when("/shows/:show_id", {
-        templateUrl : "individual-show.html"
+        templateUrl : "individual-show.html",
+        title:"internetpublicradio - shows"
     })
 
     .when("/residents", {
-        templateUrl : "residents.html"
+        templateUrl : "residents.html",
+        title:"internetpublicradio - residents"
     })
     .when("/residents/:resident_id", {
-        templateUrl : "individual-resident.html"
+        templateUrl : "individual-resident.html",
+        title:"internetpublicradio - residents"
     })
 
     .when("/guests", {
-        templateUrl : "guests.html"
+        templateUrl : "guests.html",
+        title:"internetpublicradio - guests"
     })
 
     .when("/events", {
-        templateUrl : "events.html"
+        templateUrl : "events.html",
+        title:"internetpublicradio - events"
     })
 
     .when('/tags/:tag', {
-        templateUrl: "shows.html"
+        templateUrl: "shows.html",
+        title:"internetpublicradio - shows"
     })
 
 
     .when('/about', {
-        templateUrl: "about.html"
+        templateUrl: "about.html",
+        title:"internetpublicradio - about"
     })
 
     .when('/schedule', {
-        templateUrl: "schedule.html"
+        templateUrl: "schedule.html",
+        title:"internetpublicradio - schedule"
     })
     ;
 
@@ -54,3 +64,10 @@ app.config(function($routeProvider, $locationProvider) {
     });
     
 });
+
+
+app.run(['$rootScope', '$route', function($rootScope, $route) {
+    $rootScope.$on('$routeChangeSuccess', function() {
+        document.title = $route.current.title;
+    });
+}]);
