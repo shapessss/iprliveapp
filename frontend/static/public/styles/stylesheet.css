@@ -593,6 +593,7 @@ span.genre {
 #mixcloud iframe {
 	position: absolute;
 	bottom:0;
+	width:100%;
 }
 
 #hide_mixcloud {

@@ -156,6 +156,14 @@ th {
     text-align: left;
 }
 
+
+
+#mixcloud {
+    height:150px;
+}
+
+#mixcloud iframe {height:100%;}
+
 }
 
 
