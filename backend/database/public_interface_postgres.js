@@ -179,7 +179,10 @@ function get_residents_by_show(show_id, cb) {
 	pool.connect((err, client, done) => {
 		if (err) return done();
 		client.query("SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE show_id = $1", [show_id], (err, res) => {
-			if (err) return done();
+			if (err) {
+				done();
+				return cb([]);
+			}
 			
 			let current = 0;
 			let rows = res.rows;
@@ -245,7 +248,6 @@ function get_shows(show_list, cb) {
 		//get tags
 		get_tags_by_show(show.show_id, (res)=> {
 			show.tags = res;
-			console.log('tags');
 			if (show.residents != null && show.tracks != null && show.date != null) {
 				current_complete += 1;
 				if (current_complete >= total) {
@@ -258,7 +260,6 @@ function get_shows(show_list, cb) {
 		
 		get_residents_by_show(show.show_id, (res)=> {
 			show.residents = res;
-			console.log('res');
 			if (show.tags != null && show.tracks != null && show.date != null) {
 				current_complete += 1;
 				if (current_complete >= total) {
@@ -271,7 +272,6 @@ function get_shows(show_list, cb) {
 		
 		get_tracks_by_show(show.show_id, (res)=> {
 			show.tracks = res;
-			console.log('trac');
 			if (show.tags != null && show.residents != null && show.date != null) {
 				current_complete += 1;
 				if (current_complete >= total) {
@@ -283,7 +283,6 @@ function get_shows(show_list, cb) {
 
 
 		get_next_playing(show.show_id, (res)=> {
-			console.log('date');
 			show.date = res;
 			if (show.tags != null && show.residents != null && show.tracks != null) {
 				current_complete += 1;
@@ -354,15 +353,23 @@ function get_residents(resident_list, cb) {
 
 function get_show_by_residents(resident_id, cb) {
 	pool.connect((err, client, done) => {
-		if (err) return done();
+		if (err) {
+			done();
+			return cb([]);
+		}
 
 		client.query("SELECT * FROM SHOW_RESIDENT_RELATIONSHIPS WHERE resident_id = $1", [resident_id], (err, res) => {
-			if (err) return done();;
-			
+			if (err) {
+				done();
+				return cb([]);
+			}
 			let rows = res.rows;
 			let current = 0;
 			let total = rows.length;
-			if (current == total) return cb([]);
+			if (current == total) {
+				done();
+				return cb([]);
+			}
 			let shows = [];
 			for (let r of rows) {
 				client.query("SELECT * FROM SHOWS WHERE show_id = $1", [r.show_id], (err, res) => {

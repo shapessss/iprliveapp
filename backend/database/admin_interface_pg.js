@@ -62,13 +62,31 @@ function edit_show(show_id, name, description, image_thumbnail, image_banner, fe
 
 function delete_show(show_id, cb) {
 	let sql = 'DELETE FROM SHOWS WHERE show_id = $1;'
-	pool.query(sql, [show_id], (err, row) => {
+	//delete from schedule
+	//delete from show_resident
+	let related = 0;
+	pool.connect((err, client, done)=> {
 		if (err) {
-			cb(409);
-		} else {
-			cb(200)
+			done();
+			return cb(409);
 		}
-	})
+		client.query('DELETE FROM SCHEDULE WHERE show_id = $1', [show_id], (err, row) => {
+					
+			client.query(sql, [show_id], (err, row) => {
+				done();
+				if (err) {
+					console.log(err);
+					cb(409);
+				} else {
+					cb(200)
+				}
+			})
+			
+		})
+
+		
+	});
+	
 }
 
 
@@ -187,15 +205,16 @@ function edit_resident(id, name, description, image_thumbnail, image_banner, gue
 	})
 }
 
-function delete_resident(id, cb) {
+function delete_resident(res_id, cb) {
 	let sql = 'DELETE FROM RESIDENTS WHERE resident_id = $1;'
 
-	pool.query(sql, [id], (err, row) => {
+
+	pool.query(sql, [res_id], (err, done) => {
 		if (err) {
-			cb(409);
-		} else {
-			cb(200)
-		}	
+			return cb(409);
+		}
+
+		return cb(200);
 	})
 }
 
@@ -305,6 +324,7 @@ function delete_banner(banner_id, cb) {
 /* --------------------- IMAGES ------------------------------ */
 /* --------------------- ------- ----------------------------- */
 function add_image(image_id, imagename, cb) {
+	console.log('adding image', imagename)
 	let sql = 'INSERT INTO IMAGES (image_id, imagename) VALUES ($1, $2);'
 	pool.query(sql, [image_id, imagename], (err, row)=> {
 		if (err) return cb(409);
@@ -368,14 +388,22 @@ function update_resident_show_relations(resident_id, shows, cb) {
 	pool.connect((err, client, done) => {
 		if (err) throw err;
 
+		let current = 0;
+
+
 		client.query(del_sql, [resident_id], (err, rows) => {
 			for (var r of shows) {
 				client.query(add_sql, [r.show_id, resident_id], (err, row)=> {
+					current += 1;
 					if (current == shows.length) {
 						done();
-						cb();
+						return cb();
 					}
 				})
+			}
+			if (current == shows.length) {
+				done();
+				return cb();
 			}
 		})
 	})
@@ -420,6 +448,7 @@ function edit_schedule(schedule_id, show_id, date, time, cb) {
 }
 function delete_schedule(schedule_id, cb) {
 	let sql = 'DELETE FROM SCHEDULE WHERE schedule_id = $1;'
+	console.log(schedule_id);
 	pool.query(sql, [schedule_id], (err, res)=>{
 		if (err) return cb(409);
 		cb(200);
@@ -498,6 +527,6 @@ module.exports = {
 	get_images : function(cb) {get_images(cb)},
 
 	add_schedule : function(show_id, date, time, cb) {add_schedule(show_id, date, time, cb)},
-	edit_schedule : function(schedule_id, show_id, date, time, cb) {add_schedule(schedule_id, show_id, date, time, cb)},
-	delete_schedule : function(schedule_id, cb) {add_schedule(schedule_id, cb)}
+	edit_schedule : function(schedule_id, show_id, date, time, cb) {edit_schedule(schedule_id, show_id, date, time, cb)},
+	delete_schedule : function(schedule_id, cb) {delete_schedule(schedule_id, cb)}
 }

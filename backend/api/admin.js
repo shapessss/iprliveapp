@@ -148,6 +148,7 @@ module.exports = {
 			let params = ['resident_id'];
 			let data = checkNulls(req, params)
 
+
 			if (data.length < params.length) {
 				res.json({'missingdata':params[data.length]});
 				return;
@@ -317,7 +318,7 @@ module.exports = {
 				return;
 			}
 
-			admin_interface.delete_banner(...data, (status)=>{
+			admin_interface.delete_schedule(...data, (status)=>{
 				res.status(status).send();
 			})
 		})

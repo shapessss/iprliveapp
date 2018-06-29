@@ -224,7 +224,8 @@ app.controller("administration", function($scope, $http, $route) {
 			},
 			data:$scope.edit_item
 		}
-		
+
+
 		$http(config)
 			.then((data)=> {
 				
@@ -297,9 +298,11 @@ app.controller("administration", function($scope, $http, $route) {
 	    let file = form.getElementsByTagName("input")[0];
 	    if (file.files.length < 1) return;
 
+
+
 	    let formdata = new FormData();
 	    formdata.append("image", file.files[0]);
-	    
+	    file.value = "";
 	    fetch('/api/admin/add_image', {
 	        method:'POST',
 	        body:formdata,
@@ -314,7 +317,7 @@ app.controller("administration", function($scope, $http, $route) {
 	    	}
 	        
 	    }).then(function(res) {
-	    	console.log(res);
+	    	file.value = ""; //clear file form
 	    	if (res.image_id == undefined) {
 	    		window.location.href = res;
 	    	}
