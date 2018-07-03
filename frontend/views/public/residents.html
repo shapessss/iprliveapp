@@ -6,12 +6,12 @@
 
 		<div class = "featured" ng-repeat = "resident in items">
 			<div class = "featured-image tile-active">
-				<a href="/residents/{{resident.resident_id}}" ng-click="set_resident(resident);">
+				<a href="/residents/{{resident.name}}" ng-click="set_resident(resident);">
 					<img src = "public/images/uploads/{{resident.image_thumbnail}}">
 				</a>
 			</div>
 			<div class = "description">
-				<span class = "title"><a href = "/residents/{{resident.resident_id}}" ng-click="set_resident(resident);">{{resident.name}}</a></span>
+				<span class = "title"><a href = "/residents/{{resident.name}}" ng-click="set_resident(resident);">{{resident.name}}</a></span>
 				<span class = "genre">
 					{{resident.description}}	
 				</span>

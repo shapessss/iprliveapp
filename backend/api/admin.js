@@ -277,7 +277,7 @@ module.exports = {
 				res.json({'missingdata':params[data.length]});
 				return;
 			}
-			console.log(...data);
+			
 			admin_interface.add_schedule(...data, (status, data=null)=>{
 				res.status(status).json({
 					item_id:data,
@@ -287,6 +287,7 @@ module.exports = {
 		})
 
 		app.post('/edit_schedule', (req, res)=> {
+
 			let show_id = req.body['shows'][req.body['shows'].length - 1];
 			if (show_id != undefined) {
 				req.body['show_id'] = show_id.show_id;

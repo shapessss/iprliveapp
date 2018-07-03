@@ -13,7 +13,7 @@
 			</div>
 
 			<div class = "description">
-				<span class = "title"><a href = "/shows/{{show.show_id}}" ng-click="set_show(show);">{{show.name}}</a></span>
+				<span class = "title"><a href = "/shows/{{show.name}}" ng-click="set_show(show);">{{show.name}}</a></span>
 				<span class = "genre">
 					<a href = "/tags/{{tag.tag}}" ng-repeat = "tag in show.tags">{{tag.tag}},</a>	
 				</span>

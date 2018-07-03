@@ -85,7 +85,7 @@ app.controller('individual_show', function($scope, $http, $routeParams, individu
 	let show = individual_clicked.get_show();
 	
 	if (show == null) {
-		$http.get('api/public/show?show_id=' + $routeParams.show_id)
+		$http.get('api/public/show?show_name=' + $routeParams.show_name)
 			.then((data)=> {
 				if (data.data.items.length > 0) {
 					$scope.items = data.data.items[0];
@@ -148,7 +148,7 @@ app.controller('all_residents', function($scope, $http, individual_clicked) {
 app.controller('individual_resident', function($scope, $http, $routeParams, individual_clicked) {
 	let resident = individual_clicked.get_resident();
 	if (resident == null) {
-		$http.get('api/public/resident?resident_id=' + $routeParams.resident_id)
+		$http.get('api/public/resident?resident_name=' + $routeParams.resident_name)
 			.then((data)=> {
 				if (data.data.items.length > 0) {
 					$scope.resident = data.data.items[0];

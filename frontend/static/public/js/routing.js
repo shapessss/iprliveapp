@@ -17,7 +17,7 @@ app.config(function($routeProvider, $locationProvider) {
         templateUrl : "shows.html",
         title:"internetpublicradio - shows"
     })
-    .when("/shows/:show_id", {
+    .when("/shows/:show_name", {
         templateUrl : "individual-show.html",
         title:"internetpublicradio - shows"
     })
@@ -26,7 +26,7 @@ app.config(function($routeProvider, $locationProvider) {
         templateUrl : "residents.html",
         title:"internetpublicradio - residents"
     })
-    .when("/residents/:resident_id", {
+    .when("/residents/:resident_name", {
         templateUrl : "individual-resident.html",
         title:"internetpublicradio - residents"
     })

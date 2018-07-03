@@ -1,6 +1,6 @@
 const { Pool, Client } = require('pg')
-//var connectionString = 'postgres://postgres:password@localhost:5432/radio'
-var connectionString = "postgres://xqfejbmovmcger:43150b88f6939c50ed733a25187d127d1a1b74a04b6531ac41b66158c7ad5f43@ec2-174-129-192-200.compute-1.amazonaws.com:5432/d36rhr4o68ln8e"
+var connectionString = 'postgres://postgres:dominique95@localhost:5432/radio'
+//var connectionString = "postgres://xqfejbmovmcger:43150b88f6939c50ed733a25187d127d1a1b74a04b6531ac41b66158c7ad5f43@ec2-174-129-192-200.compute-1.amazonaws.com:5432/d36rhr4o68ln8e"
 const pool = new Pool({
   connectionString: connectionString,
 })
@@ -96,8 +96,19 @@ function get_featured_shows(cb) {
 }
 
 
-function get_individual_show(show_id, cb) {
-	pool.query("SELECT * FROM SHOWS WHERE show_id = $1", [show_id], (err, rows) => {
+function get_individual_show(q, cb) {
+	let sql = '';
+	let x = null;
+	if (q.show_id != undefined) {
+		sql = "SELECT * FROM SHOWS WHERE show_id = $1"
+		x = q.show_id;
+	} else if (q.show_name != null) {
+		sql = "SELECT * FROM SHOWS WHERE LOWER(name) = LOWER($1)"
+		x = q.show_name;
+	} else {
+		return cb([]);
+	}
+	pool.query(sql, [x], (err, rows) => {
 		if (err) return cb([]);
 
 		get_shows(rows.rows, cb);
@@ -303,8 +314,20 @@ function get_shows(show_list, cb) {
 
 
 /* RESIDENTS */
-function get_individual_resident(resident_id, cb) {
-	pool.query("SELECT * FROM RESIDENTS WHERE resident_id = $1", [resident_id], (err, rows) => {
+function get_individual_resident(q, cb) {
+	let sql = '';
+	let x = null;
+	if (q.resident_id != undefined) {
+		sql = "SELECT * FROM RESIDENTS WHERE resident_id = $1"
+		x = q.resident_id;
+	} else if (q.resident_name != null) {
+		sql = "SELECT * FROM RESIDENTS WHERE LOWER(name) = LOWER($1)"
+		x = q.resident_name;
+	} else {
+		return cb([]);
+	}
+
+	pool.query(sql, [x], (err, rows) => {
 		if (err) throw err;
 
 		get_residents(rows.rows, cb);
@@ -404,10 +427,10 @@ module.exports = {
 	get_latest_shows: function(cb) {get_latest_shows(cb)},
 	get_featured_shows: function(cb) {get_featured_shows(cb)},
 	get_tagged_shows: function(tag, cb) {get_tagged_shows(tag, cb)},
-	get_individual_show: function(show_id, cb) {get_individual_show(show_id, cb)},
+	get_individual_show: function(q, cb) {get_individual_show(q, cb)},
 	get_all_shows: function(cb) {get_all_shows(cb)},
 
 	get_all_residents: function(cb) {get_all_residents(cb)},
 	get_all_guests: function(cb) {get_all_guests(cb)},
-	get_individual_resident: function(resident_id, cb) {get_individual_resident(resident_id, cb)}
+	get_individual_resident: function(q, cb) {get_individual_resident(q, cb)}
 }
