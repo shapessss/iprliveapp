@@ -126,7 +126,7 @@ let schedule_table = `
 CREATE TABLE IF NOT EXISTS SCHEDULE (
 	schedule_id SERIAL PRIMARY KEY,
 	show_id INTEGER REFERENCES SHOWS(show_id),
-	date VARHCAR(30),
+	date VARCHAR(30),
 	time TIME
 )
 `;
