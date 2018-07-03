@@ -11,7 +11,7 @@ const pool = new Pool({
 /* --------------------- ---- ------------------------------ */
 /* --------------------- SHOW ------------------------------ */
 /* --------------------- ---- ------------------------------ */
-function add_show(name, description, image_thumbnail, image_banner, featured, stream, cb, cbid) {
+function add_show(name, description, image_thumbnail, image_banner, featured, stream, webpath, cb, cbid) {
 	//change true/false to 1/0
 	if (featured == true) {
 		featured = 1;
@@ -21,11 +21,11 @@ function add_show(name, description, image_thumbnail, image_banner, featured, st
 
 
 	let sql = `
-	INSERT INTO SHOWS(name, description, image_thumbnail, image_banner, featured, stream)
-	 VALUES($1, $2, $3, $4, $5, $6)
+	INSERT INTO SHOWS(name, description, image_thumbnail, image_banner, featured, stream, webpath)
+	 VALUES($1, $2, $3, $4, $5, $6, $7)
 	 RETURNING show_id;`;
 	
-	pool.query(sql, [name, description, image_thumbnail, image_banner, featured, stream], (err, row) => {
+	pool.query(sql, [name, description, image_thumbnail, image_banner, featured, stream, webpath], (err, row) => {
 		if (err) {
 			return cb(409);
 		}
@@ -36,7 +36,7 @@ function add_show(name, description, image_thumbnail, image_banner, featured, st
 	})
 }
 
-function edit_show(show_id, name, description, image_thumbnail, image_banner, featured, stream, cb) {
+function edit_show(show_id, name, description, image_thumbnail, image_banner, featured, stream, webpath, cb) {
 	
 	
 	let sql = `
@@ -46,12 +46,13 @@ function edit_show(show_id, name, description, image_thumbnail, image_banner, fe
 		image_thumbnail = $3,
 		image_banner = $4,
 		featured = $5,
-		stream = $6
+		stream = $6,
+		webpath = $7
 	WHERE 
-		show_id = $7
+		show_id = $8
 	`;
 
-	pool.query(sql, [name, description, image_thumbnail, image_banner, featured, stream, show_id], (err, row) => {
+	pool.query(sql, [name, description, image_thumbnail, image_banner, featured, stream, webpath, show_id], (err, row) => {
 		if (err) {
 			cb(409);
 		} else {
@@ -164,15 +165,15 @@ function update_tags(show_id, tags, cb) {
 /* --------------------- RESIDENT ------------------------------ */
 /* --------------------- -------- ------------------------------ */
 
-function add_resident(name, description, image_thumbnail, image_banner, guest=0, cb, cbid) {
+function add_resident(name, description, image_thumbnail, image_banner, guest=0, webpath, cb, cbid) {
 	
 	let sql = `
-	INSERT INTO RESIDENTS(name, description, image_thumbnail, image_banner, guest)
-	 VALUES($1, $2, $3, $4, $5)
+	INSERT INTO RESIDENTS(name, description, image_thumbnail, image_banner, guest, webpath)
+	 VALUES($1, $2, $3, $4, $5, $6)
 	 RETURNING resident_id;`;
 
 	
-	pool.query(sql, [name, description, image_thumbnail, image_banner, guest], (err, row) => {
+	pool.query(sql, [name, description, image_thumbnail, image_banner, guest, webpath], (err, row) => {
 		if (err) {
 			cb(409);
 		} else {
@@ -183,7 +184,7 @@ function add_resident(name, description, image_thumbnail, image_banner, guest=0,
 	})
 }
 
-function edit_resident(id, name, description, image_thumbnail, image_banner, guest, cb) {
+function edit_resident(id, name, description, image_thumbnail, image_banner, guest, webpath, cb) {
 
 	let sql = `
 	UPDATE RESIDENTS
@@ -191,12 +192,13 @@ function edit_resident(id, name, description, image_thumbnail, image_banner, gue
 		description = $2,
 		image_thumbnail = $3,
 		image_banner = $4,
-		guest = $5
+		guest = $5,
+		webpath = $6
 	WHERE 
-		resident_id = $6
+		resident_id = $7
 	`;
 
-	pool.query(sql, [name, description, image_thumbnail, image_banner, guest, id], (err, row) => {
+	pool.query(sql, [name, description, image_thumbnail, image_banner, guest, webpath, id], (err, row) => {
 		if (err) {
 			cb(409);
 		} else {
@@ -457,8 +459,8 @@ function delete_schedule(schedule_id, cb) {
 
 
 module.exports = {
-	add_show : function(name, description, image_thumbnail, image_banner, featured, stream, tracks, tags, residents, cb) {
-		add_show(name, description, image_thumbnail, image_banner, featured, stream, cb, (show_id)=> {
+	add_show : function(name, description, image_thumbnail, image_banner, featured, stream, tracks, tags, residents, webpath, cb) {
+		add_show(name, description, image_thumbnail, image_banner, featured, stream, webpath, cb, (show_id)=> {
 			update_tracklist(show_id, tracks, ()=>{});
 			update_tags(show_id, tags, ()=>{});
 			update_show_resident_relations(show_id, residents, ()=>{});
@@ -466,8 +468,8 @@ module.exports = {
 
 		
 	},
-	edit_show : function(show_id, name, description, image_thumbnail, image_banner, featured, stream, tracks, tags, residents, cb) {
-		edit_show(show_id, name, description, image_thumbnail, image_banner, featured, stream, cb);
+	edit_show : function(show_id, name, description, image_thumbnail, image_banner, featured, stream, tracks, tags, residents, webpath, cb) {
+		edit_show(show_id, name, description, image_thumbnail, image_banner, featured, stream, webpath, cb);
 
 		update_tracklist(show_id, tracks, ()=>{});
 		update_tags(show_id, tags, ()=>{});
@@ -490,15 +492,15 @@ module.exports = {
 	},
 
 
-	add_resident : function(name, description, image_thumbnail, image_banner, guest, shows, cb) {
-		add_resident(name, description, image_thumbnail, image_banner, guest, cb, (resident_id)=> {
+	add_resident : function(name, description, image_thumbnail, image_banner, guest, shows, webpath, cb) {
+		add_resident(name, description, image_thumbnail, image_banner, guest, webpath, cb, (resident_id)=> {
 			update_resident_show_relations(resident_id, shows, ()=>{});
 		});
 
 		
 	},
-	edit_resident : function(resident_id, name, description, image_thumbnail, image_banner, guest, shows, cb) {
-		edit_resident(resident_id, name, description, image_thumbnail, image_banner, guest, cb);
+	edit_resident : function(resident_id, name, description, image_thumbnail, image_banner, guest, shows, webpath, cb) {
+		edit_resident(resident_id, name, description, image_thumbnail, image_banner, guest, webpath, cb);
 
 		update_resident_show_relations(resident_id, shows, ()=>{});
 	},

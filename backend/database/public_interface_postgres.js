@@ -53,12 +53,13 @@ function get_schedules(cb) {
 				return cb([])
 			}
 			for (let r of rows) {
-				client.query("SELECT name FROM SHOWS WHERE show_id = $1", [r.show_id], (err, res)=> {
+				client.query("SELECT name, webpath FROM SHOWS WHERE show_id = $1", [r.show_id], (err, res)=> {
 					current += 1;
-					r.show_name = res.rows[0]['name'];
-					r.shows = [{show_id: r.show_id}]
-					//let date = r['date'].getDate() + "-" + r['date'].getMonth() + "-" + r['date'].getFullYear()
-					r['name'] = r.show_name 
+				
+					r.webpath = res.rows[0]['webpath'];
+					
+					
+					r['name'] = res.rows[0]['name'];
 
 					if (current == rows.length) {
 						done();
@@ -103,7 +104,7 @@ function get_individual_show(q, cb) {
 		sql = "SELECT * FROM SHOWS WHERE show_id = $1"
 		x = q.show_id;
 	} else if (q.show_name != null) {
-		sql = "SELECT * FROM SHOWS WHERE LOWER(name) = LOWER($1)"
+		sql = "SELECT * FROM SHOWS WHERE LOWER(webpath) = LOWER($1)"
 		x = q.show_name;
 	} else {
 		return cb([]);
@@ -321,7 +322,7 @@ function get_individual_resident(q, cb) {
 		sql = "SELECT * FROM RESIDENTS WHERE resident_id = $1"
 		x = q.resident_id;
 	} else if (q.resident_name != null) {
-		sql = "SELECT * FROM RESIDENTS WHERE LOWER(name) = LOWER($1)"
+		sql = "SELECT * FROM RESIDENTS WHERE LOWER(webpath) = LOWER($1)"
 		x = q.resident_name;
 	} else {
 		return cb([]);

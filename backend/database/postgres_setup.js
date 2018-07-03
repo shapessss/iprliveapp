@@ -130,6 +130,17 @@ ALTER DATE TYPE VARCHAR(30);
 `;
 
 
+let alter_table_shows = `
+ALTER TABLE SHOWS 
+ADD COLUMN WEBPATH VARCHAR(100) UNIQUE NOT NULL;
+`;
+
+let alter_table_res = `
+ALTER TABLE RESIDENTS 
+ADD COLUMN WEBPATH VARCHAR(100) UNIQUE NOT NULL;
+`;
+
+
 
 
 function add_table() {
@@ -138,8 +149,21 @@ function add_table() {
 
 		
 		let tables = 0;
-		let queries = 9;
-		
+		let queries = 2;
+
+		client.query(alter_table_shows, (err, res)=> {
+			tables += 1;
+			if (tables == queries) done();
+			if (err) console.log(err);
+		})
+		client.query(alter_table_res, (err, res)=> {
+			tables += 1;
+			if (tables == queries) done();
+			if (err) console.log(err);
+		})
+
+
+		/*
 		client.query(image_sql, (err, res)=> {
 			tables += 1;
 			if (tables == queries) done();
@@ -193,6 +217,8 @@ function add_table() {
 			if (tables == queries) done();
 		})
 
+		*/
+
 	})
 }
 
@@ -221,3 +247,5 @@ module.exports = {
 	add_table: function(){add_table()},
 	alter_table: function(){alter_table()}
 }
+
+

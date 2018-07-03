@@ -64,7 +64,7 @@ module.exports = {
 		/* --------------------- ---- ------------------------------ */
 		//name, description, image_thumbnail, image_banner, frequency, featured, cb
 		app.post('/add_show', (req, res)=>{
-			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'featured', 'stream', 'tracks', 'tags', 'residents'];
+			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'featured', 'stream', 'tracks', 'tags', 'residents', 'webpath'];
 			let data = checkNulls(req, params)
 
 			if (data.length < params.length) {
@@ -82,7 +82,7 @@ module.exports = {
 
 		//show_id, name, description, image_thumbnail, image_banner, frequency, featured, cb
 		app.post('/edit_show', (req, res)=>{
-			let params = ['show_id','name', 'description', 'image_thumbnail', 'image_banner', 'featured', 'stream', 'tracks', 'tags', 'residents'];
+			let params = ['show_id','name', 'description', 'image_thumbnail', 'image_banner', 'featured', 'stream', 'tracks', 'tags', 'residents', 'webpath'];
 			let data = checkNulls(req, params)
 
 			if (data.length < params.length) {
@@ -114,7 +114,7 @@ module.exports = {
 		/* --------------------- ---- ------------------------------ */
 		//name, description, image_thumbnail, image_banner, guest, shows, cb
 		app.post('/add_resident', (req, res)=> {
-			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'guest', 'shows'];
+			let params = ['name', 'description', 'image_thumbnail', 'image_banner', 'guest', 'shows', 'webpath'];
 			let data = checkNulls(req, params)
 
 			if (data.length < params.length) {
@@ -131,7 +131,7 @@ module.exports = {
 		})
 
 		app.post('/edit_resident', (req, res)=> {
-			let params = ['resident_id', 'name', 'description', 'image_thumbnail', 'image_banner', 'guest', 'shows'];
+			let params = ['resident_id', 'name', 'description', 'image_thumbnail', 'image_banner', 'guest', 'shows', 'webpath'];
 			let data = checkNulls(req, params)
 
 			if (data.length < params.length) {
