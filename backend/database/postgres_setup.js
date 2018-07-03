@@ -6,7 +6,17 @@ const pool = new Pool({
 })
 
 
-
+let drop_tables = `
+DROP TABLE IF EXISTS IMAGES;
+DROP TABLE IF EXISTS TAGS;
+DROP TABLE IF EXISTS TRACKS;
+DROP TABLE IF EXISTS SCHEDULE;
+DROP TABLE IF EXISTS SHOW_RESIDENT_RELATIONSHIPS;
+DROP TABLE IF EXISTS RESIDENTS;
+DROP TABLE IF EXISTS SHOWS;
+DROP TABLE IF EXISTS BANNERS;
+DROP TABLE IF EXISTS EVENTS;
+`;
 
 
 /* --------------------------------------------------
@@ -40,7 +50,7 @@ CREATE TABLE IF NOT EXISTS EVENTS (
 	event_id SERIAL PRIMARY KEY,
 	name VARCHAR(100),
 	image_thumbnail VARCHAR(100) REFERENCES IMAGES (image_id),
-	date DATE,
+	date VARCHAR(30),
 	url VARCHAR(100)
 );
 `
@@ -58,7 +68,8 @@ CREATE TABLE IF NOT EXISTS SHOWS (
 	image_thumbnail VARCHAR(100) REFERENCES IMAGES (image_id),
 	image_banner VARCHAR(100) REFERENCES IMAGES (image_id),
 	featured BOOLEAN DEFAULT FALSE,
-	stream VARCHAR(200)
+	stream VARCHAR(200),
+	webpath VARCHAR(30) UNIQUE NOT NULL
 );
 `;
 
@@ -95,7 +106,8 @@ CREATE TABLE IF NOT EXISTS RESIDENTS (
 	description VARCHAR(100),
 	image_thumbnail VARCHAR(100) REFERENCES IMAGES (image_id),
 	image_banner VARCHAR(100) REFERENCES IMAGES (image_id),
-	guest BOOLEAN DEFAULT FALSE
+	guest BOOLEAN DEFAULT FALSE,
+	webpath VARCHAR(30) UNIQUE NOT NULL
 );
 `; 
 
@@ -114,7 +126,7 @@ let schedule_table = `
 CREATE TABLE IF NOT EXISTS SCHEDULE (
 	schedule_id SERIAL PRIMARY KEY,
 	show_id INTEGER REFERENCES SHOWS(show_id),
-	date DATE,
+	date VARHCAR(30),
 	time TIME
 )
 `;
@@ -149,21 +161,12 @@ function add_table() {
 
 		
 		let tables = 0;
-		let queries = 2;
+		let queries = 9;
 
-		client.query(alter_table_shows, (err, res)=> {
-			tables += 1;
-			if (tables == queries) done();
-			if (err) console.log(err);
-		})
-		client.query(alter_table_res, (err, res)=> {
-			tables += 1;
-			if (tables == queries) done();
-			if (err) console.log(err);
-		})
+		
 
 
-		/*
+		
 		client.query(image_sql, (err, res)=> {
 			tables += 1;
 			if (tables == queries) done();
@@ -215,9 +218,10 @@ function add_table() {
 		client.query(schedule_table, (err, res)=>{
 			tables += 1;
 			if (tables == queries) done();
+			if (err) console.log(err);
 		})
 
-		*/
+		
 
 	})
 }
@@ -243,8 +247,21 @@ function alter_table() {
 }
 
 
+function delete_table(cb) {
+	pool.query(drop_tables, (err, res)=>{
+		cb();
+	})
+}
+
+
 module.exports = {
-	add_table: function(){add_table()},
+	add_table: function(){
+
+		delete_table(()=> {
+			add_table();
+		})
+		
+	},
 	alter_table: function(){alter_table()}
 }
 
