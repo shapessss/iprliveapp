@@ -256,10 +256,8 @@ function delete_table(cb) {
 
 module.exports = {
 	add_table: function(){
-
-		delete_table(()=> {
-			add_table();
-		})
+		add_table();
+		console.log('added tables');
 		
 	},
 	alter_table: function(){alter_table()}
